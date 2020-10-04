@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Dto;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Npgsql;
+using Npgsql.Logging;
 using Serilog;
 
 namespace api
@@ -19,6 +22,8 @@ namespace api
                 .WriteTo.Console()
                 .CreateLogger();
 
+            NpgsqlLogManager.Provider = new ConsoleLoggingProvider(NpgsqlLogLevel.Debug, true, true);
+            
             CreateHostBuilder(args).Build().Run();
         }
 

@@ -32,6 +32,12 @@ namespace api
                     Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")
                 )
             );
+            services.AddScoped<IOrderRepository, OrderRepository>(provider =>
+                new OrderRepository(
+                    Environment.GetEnvironmentVariable("DB_CONNECTION_STRING"),
+                    provider.GetRequiredService<ILogger<OrderRepository>>()
+                    )
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
