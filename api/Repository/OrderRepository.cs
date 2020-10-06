@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
-using api.Dto;
+using api.Models;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using Npgsql.PostgresTypes;
@@ -22,7 +22,7 @@ namespace api.Repository
             _logger = logger;
         }
 
-        private long CreateOrder(NpgsqlConnection connection, InsertOrderObject order)
+        private long CreateOrder(NpgsqlConnection connection, PlaceOrder order)
         {
             object createdOrderId;
             using (var cmd = new NpgsqlCommand("create_order", connection))
@@ -88,7 +88,7 @@ namespace api.Repository
         }
 
 
-        public void PlaceOrder(InsertOrderObject order)
+        public void PlaceOrder(PlaceOrder order)
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {

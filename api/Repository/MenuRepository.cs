@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using api.Dto;
+using api.Models;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using api.Dto;
+using api.Models;
 using api.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +22,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("placeOrder")]
-        public ActionResult PlaceOrder([FromBody] InsertOrderObject order)
+        public ActionResult PlaceOrder([FromBody] PlaceOrder order)
         {
             order.OrderTime = DateTime.Now;
             _orderRepository.PlaceOrder(order);
