@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Models;
 
-namespace api.Repository
+namespace api.Services
 {
-    public interface IMenuRepository
+    public interface IMenuService
     {
         public Menu GetMenu();
     }

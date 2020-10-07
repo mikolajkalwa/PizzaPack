@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using api.Models;
-using api.Repository;
+using api.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,20 +14,36 @@ namespace api.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IOrdersService _ordersService;
 
-        public OrdersController(IOrderRepository orderRepository)
+        public OrdersController(IOrdersService ordersService)
         {
-            _orderRepository = orderRepository;
+            _ordersService = ordersService;
         }
 
         [HttpPost]
-        [Route("placeOrder")]
-        public ActionResult PlaceOrder([FromBody] PlaceOrder order)
+        [Route("PlaceOrder")]
+        public ActionResult<Order> PlaceOrder([FromBody] PlaceOrder order)
         {
-            order.OrderTime = DateTime.Now;
-            _orderRepository.PlaceOrder(order);
-            return Ok();
+            try
+            {
+                var placedOrder = _ordersService.CreateOrder(order);
+                return Created("GetOrdersHistory", placedOrder);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new
+                {
+                    ex.Message
+                });
+            }
+        }
+
+        [HttpGet]
+        [Route("OrdersHistory")]
+        public ActionResult<IEnumerable<Order>> OrderHistory()
+        {
+            return Ok(_ordersService.GetOrdersHistory());
         }
     }
 }

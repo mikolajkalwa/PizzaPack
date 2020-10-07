@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using api.Repository;
-using Microsoft.AspNetCore.Http;
+﻿using api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -12,18 +7,18 @@ namespace api.Controllers
     [ApiController]
     public class MenuController : ControllerBase
     {
-        private readonly IMenuRepository _menuRepository;
+        private readonly IMenuService _menuService;
 
-        public MenuController(IMenuRepository menuRepository)
+        public MenuController(IMenuService menuService)
         {
-            _menuRepository = menuRepository;
+            _menuService = menuService;
         }
 
         [HttpGet]
         [Route("")]
         public ActionResult GetMenu()
         {
-            var menu = _menuRepository.GetMenu();
+            var menu = _menuService.GetMenu();
             return Ok(menu);
         }
     }

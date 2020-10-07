@@ -1,16 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using api.Repository;
+using api.Models;
+using api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace api
 {
@@ -26,18 +21,18 @@ namespace api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<DatabaseSettings>(
+                Configuration.GetSection(nameof(DatabaseSettings))
+            );
+
+            services.AddSingleton<IDatabaseSettings>(provider =>
+                provider.GetRequiredService<IOptions<DatabaseSettings>>().Value
+            );
+
+            services.AddSingleton<IMenuService, MenuService>();
+            services.AddSingleton<IOrdersService, OrdersService>();
+
             services.AddControllers();
-            services.AddScoped<IMenuRepository, MenuRepository>(provider =>
-                new MenuRepository(
-                    Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")
-                )
-            );
-            services.AddScoped<IOrderRepository, OrderRepository>(provider =>
-                new OrderRepository(
-                    Environment.GetEnvironmentVariable("DB_CONNECTION_STRING"),
-                    provider.GetRequiredService<ILogger<OrderRepository>>()
-                    )
-            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

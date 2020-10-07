@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,23 +9,27 @@ namespace api.Models
 {
     public class Menu
     {
-        public IEnumerable<DishObject> Dishes { get; set; }
-        public IEnumerable<AdditiveObject> Additives { get; set; }
+        public IEnumerable<Dish> Dishes { get; set; }
+        public IEnumerable<Extras> Extras { get; set; }
     }
 
-    public class DishObject
+    public class Dish
     {
-        public int DishIdentifier { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string DishIdentifier { get; set; }
         public string DishName { get; set; }
         public decimal DishPrice { get; set; }
         public string DishCategory { get; set; }
     }
 
-    public class AdditiveObject
+    public class Extras
     {
-        public int AdditiveIdentifier { get; set; }
-        public string AdditiveName { get; set; }
-        public decimal AdditivePrice { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string ExtrasIdentifier { get; set; }
+        public string ExtrasName { get; set; }
+        public decimal ExtrasPrice { get; set; }
         public string DishCategory { get; set; }
     }
 }
