@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Configuration;
 using api.Models;
 using MongoDB.Driver;
 

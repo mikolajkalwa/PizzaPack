@@ -1,3 +1,4 @@
+using api.Configuration;
 using api.Models;
 using api.Services;
 using Microsoft.AspNetCore.Builder;
@@ -29,8 +30,20 @@ namespace api
                 provider.GetRequiredService<IOptions<DatabaseSettings>>().Value
             );
 
+            services.Configure<SendGridSettings>(
+                Configuration.GetSection(nameof(SendGridSettings))
+            );
+
+            services.AddSingleton<ISendGridSettings>(provider =>
+                provider.GetRequiredService<IOptions<SendGridSettings>>().Value
+            );
+
             services.AddSingleton<IMenuService, MenuService>();
             services.AddSingleton<IOrdersService, OrdersService>();
+
+            services.AddSingleton<INotificationService, SendGridService>();
+
+            services.Decorate<IOrdersService, OrdersNotificationService>();
 
             services.AddControllers();
         }
