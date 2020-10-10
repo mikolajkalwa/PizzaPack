@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 
 namespace gui.ApiClient.Models
 {
@@ -22,5 +23,10 @@ namespace gui.ApiClient.Models
         public string ExtrasName { get; set; }
         public decimal ExtrasPrice { get; set; }
         public string DishCategory { get; set; }
+
+        public override string ToString()
+        {
+            return $"{ExtrasName} - {ExtrasPrice.ToString("C", new CultureInfo("PL"))}";
+        }
     }
 }

@@ -5,7 +5,7 @@ using gui.ApiClient.Models;
 
 namespace gui.ApiClient
 {
-    public interface IRestClient
+    public interface IPizzeriaApiClient
     {
         Order PlaceOrder(PlaceOrder order);
         Menu GetMenu();

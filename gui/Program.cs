@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using gui.ApiClient;
+using gui.Models;
 
 namespace gui
 {
@@ -35,8 +36,7 @@ namespace gui
 
 
             services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
-
-            services.AddScoped<IRestClient, RestRestClient>();
+            services.AddScoped<IPizzeriaApiClient, PizzeriaApiClient>();
             services.AddScoped<MainForm>();
         }
     }

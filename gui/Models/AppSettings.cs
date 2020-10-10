@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace gui
+namespace gui.Models
 {
     public class AppSettings
     {

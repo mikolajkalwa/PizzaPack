@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using gui.ApiClient.Models;
+using gui.Models;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestSharp;
 
 namespace gui.ApiClient
 {
-    public class RestRestClient : IRestClient
+    public class PizzeriaApiClient : IPizzeriaApiClient
     {
         private readonly RestClient _client;
 
-        public RestRestClient(IOptions<AppSettings> appSettings)
+        public PizzeriaApiClient(IOptions<AppSettings> appSettings)
         {
             _client = new RestClient(appSettings.Value.ApiAddress);
         }
@@ -49,8 +50,8 @@ namespace gui.ApiClient
             var response = _client.Get(request);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                IEnumerable<Order> orderesHistory = JsonConvert.DeserializeObject<IEnumerable<Order>>(response.Content);
-                return orderesHistory;
+                IEnumerable<Order> ordersHistory = JsonConvert.DeserializeObject<IEnumerable<Order>>(response.Content);
+                return ordersHistory;
             }
             throw new Exception(response.ErrorMessage);
         }
