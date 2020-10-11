@@ -9,6 +9,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using FluentValidation.Results;
+using gui.Validators;
 
 namespace gui
 {
@@ -84,10 +86,27 @@ namespace gui
                 Notes = richTextBoxOrderNotes.Text
             };
 
-            _client.PlaceOrder(placeOrder);
-            _appState.DishesInOrder.Clear();
-            MessageBox.Show("Zamówienie zostało przyjęte!");
-            Close();
+            PlaceOrderValidator validator = new PlaceOrderValidator();
+            ValidationResult results = validator.Validate(placeOrder);
+
+            if (results.IsValid)
+            {
+                _client.PlaceOrder(placeOrder);
+                _appState.DishesInOrder.Clear();
+                MessageBox.Show("Zamówienie zostało przyjęte!");
+                Close();
+            }
+            else
+            {
+                StringBuilder errors = new StringBuilder();
+                foreach (var validationFailure in results.Errors)
+                {
+                    errors.AppendLine(validationFailure.ErrorMessage);
+                }
+
+                MessageBox.Show(errors.ToString());
+            }
+
         }
 
         private void SummarizeOrderForm_Load(object sender, EventArgs e)

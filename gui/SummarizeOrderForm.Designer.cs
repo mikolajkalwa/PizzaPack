@@ -63,7 +63,6 @@
             // 
             // buttonPlaceOrder
             // 
-            this.buttonPlaceOrder.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.buttonPlaceOrder.Location = new System.Drawing.Point(352, 499);
             this.buttonPlaceOrder.Name = "buttonPlaceOrder";
             this.buttonPlaceOrder.Size = new System.Drawing.Size(112, 24);

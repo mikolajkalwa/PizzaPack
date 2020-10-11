@@ -2,7 +2,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows.Forms;
+using FluentValidation;
 using gui.ApiClient;
 using gui.Models;
 
@@ -19,6 +21,8 @@ namespace gui
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("PL");
+
 
             var services = new ServiceCollection();
             ConfigureServices(services);
