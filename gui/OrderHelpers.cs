@@ -53,5 +53,11 @@ namespace gui
         {
             return _menu.Extras.Where(extras => extras.DishCategory == dishCategory).ToList();
         }
+
+        public DateTimeOffset ConvertObjectIdToDate(string objectId)
+        {
+            var seconds = Convert.ToInt32(objectId.Substring(0, 8), 16);
+            return DateTimeOffset.FromUnixTimeSeconds(seconds);
+        }
     }
 }

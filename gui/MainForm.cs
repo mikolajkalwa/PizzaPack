@@ -93,7 +93,7 @@ namespace gui
 
         private void buttonOrdersHistory_Click(object sender, EventArgs e)
         {
-            using (OrdersHistoryForm ordersHistoryForm = new OrdersHistoryForm(_client))
+            using (OrdersHistoryForm ordersHistoryForm = new OrdersHistoryForm(_client, _orderHelpers))
             {
                 ordersHistoryForm.ShowDialog();
             }

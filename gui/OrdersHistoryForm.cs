@@ -15,10 +15,12 @@ namespace gui
     public partial class OrdersHistoryForm : Form
     {
         private readonly IPizzeriaApiClient _client;
+        private readonly OrderHelpers _orderHelpers;
 
-        public OrdersHistoryForm(IPizzeriaApiClient client)
+        public OrdersHistoryForm(IPizzeriaApiClient client, OrderHelpers orderHelpers)
         {
             _client = client;
+            _orderHelpers = orderHelpers;
             InitializeComponent();
         }
 
@@ -27,12 +29,6 @@ namespace gui
             var orders = _client.GetOrdersHistory();
             listBoxOrders.DataSource = orders;
             listBoxOrders.DisplayMember = "OrderIdentifier";
-        }
-
-        private DateTimeOffset ConvertObjectIdToDate(string objectId)
-        {
-            var seconds = Convert.ToInt32(objectId.Substring(0, 8), 16);
-            return DateTimeOffset.FromUnixTimeSeconds(seconds);
         }
 
         private string GetOrderedExtrasToDisplay(IList<OrderedExtras> extras)
@@ -89,7 +85,7 @@ namespace gui
         private void listBoxOrders_SelectedIndexChanged(object sender, EventArgs e)
         {
             var order = (Order)listBoxOrders.SelectedItems[0];
-            DateTimeOffset date = ConvertObjectIdToDate(order.OrderIdentifier);
+            DateTimeOffset date = _orderHelpers.ConvertObjectIdToDate(order.OrderIdentifier);
 
             richTextBoxNotes.Text = order.Notes;
             textBoxTotalPrice.Text = order.TotalPrice.ToString("C", new CultureInfo("PL"));
