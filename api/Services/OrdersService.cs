@@ -5,7 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using api.Configuration;
+using api.Validators;
+using FluentValidation.Results;
 
 namespace api.Services
 {
@@ -24,11 +27,24 @@ namespace api.Services
 
         public IEnumerable<Order> GetOrdersHistory()
         {
-            return _orders.Find(_ => true).ToList();
+            return _orders.Find(_ => true).SortByDescending(bson => bson.OrderIdentifier).ToList();
         }
 
         public Order CreateOrder(PlaceOrder order)
         {
+            PlaceOrderValidator validator = new PlaceOrderValidator();
+            ValidationResult results = validator.Validate(order);
+            
+            if (!results.IsValid)
+            {
+                var message = new StringBuilder();
+                foreach (var failure in results.Errors)
+                {
+                    message.AppendLine(failure.ErrorMessage);
+                }
+                throw new ArgumentException(message.ToString());
+            }
+
             decimal totalPrice = 0;
 
             var placedOrder = new Order { Dishes = new List<OrderedDish>() };
@@ -38,7 +54,12 @@ namespace api.Services
             foreach (var orderedDish in order.Dishes)
             {
 
-                var menuEntryForOrderedDish = menu.Dishes.Single(d => d.DishIdentifier == orderedDish.DishIdentifier);
+                var menuEntryForOrderedDish = menu.Dishes.SingleOrDefault(d => d.DishIdentifier == orderedDish.DishIdentifier);
+
+                if (menuEntryForOrderedDish == null)
+                {
+                    throw new ArgumentException($"Dish with identifier {orderedDish.DishIdentifier} does not exists!");
+                }
 
                 decimal orderedExtrasPrice = 0;
                 List<OrderedExtras> orderedExtrasForDish = null;
@@ -46,9 +67,20 @@ namespace api.Services
                 if (orderedDish.Extras != null)
                 {
                     orderedExtrasForDish = new List<OrderedExtras>();
+
+                    if (orderedDish.Extras.Count != orderedDish.Extras.Distinct().Count())
+                    {
+                        throw new ArgumentException($"Dish order cannot include duplicated extras");
+                    }
+
                     foreach (var orderedExtras in orderedDish.Extras)
                     {
-                        var menuEntryForOrderedExtras = menu.Extras.Single(e => e.ExtrasIdentifier == orderedExtras);
+                        var menuEntryForOrderedExtras = menu.Extras.SingleOrDefault(e => e.ExtrasIdentifier == orderedExtras);
+
+                        if (menuEntryForOrderedExtras == null)
+                        {
+                            throw new ArgumentException($"Extras with identifier {orderedExtras} does not exists!");
+                        }
 
                         if (menuEntryForOrderedExtras.DishCategory != menuEntryForOrderedDish.DishCategory)
                         {
