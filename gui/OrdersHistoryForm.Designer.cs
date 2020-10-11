@@ -211,7 +211,9 @@
             this.ClientSize = new System.Drawing.Size(902, 624);
             this.Controls.Add(this.groupBoxOrderDetails);
             this.Controls.Add(this.groupBoxOrders);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "OrdersHistoryForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Historia zamówień";
             this.Load += new System.EventHandler(this.OrdersHistoryForm_Load);
             this.groupBoxOrders.ResumeLayout(false);

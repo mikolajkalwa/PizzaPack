@@ -63,20 +63,22 @@
             // 
             // buttonPlaceOrder
             // 
+            this.buttonPlaceOrder.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.buttonPlaceOrder.Location = new System.Drawing.Point(352, 499);
             this.buttonPlaceOrder.Name = "buttonPlaceOrder";
             this.buttonPlaceOrder.Size = new System.Drawing.Size(112, 24);
-            this.buttonPlaceOrder.TabIndex = 1;
+            this.buttonPlaceOrder.TabIndex = 8;
             this.buttonPlaceOrder.Text = "Złóż zamówienie";
             this.buttonPlaceOrder.UseVisualStyleBackColor = true;
             this.buttonPlaceOrder.Click += new System.EventHandler(this.buttonPlaceOrder_Click);
             // 
             // buttonCancel
             // 
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonCancel.Location = new System.Drawing.Point(271, 499);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonCancel.TabIndex = 2;
+            this.buttonCancel.TabIndex = 7;
             this.buttonCancel.Text = "Anuluj";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
@@ -86,7 +88,7 @@
             this.textBoxEmail.Location = new System.Drawing.Point(12, 416);
             this.textBoxEmail.Name = "textBoxEmail";
             this.textBoxEmail.Size = new System.Drawing.Size(452, 23);
-            this.textBoxEmail.TabIndex = 3;
+            this.textBoxEmail.TabIndex = 4;
             // 
             // labelEmail
             // 
@@ -94,7 +96,7 @@
             this.labelEmail.Location = new System.Drawing.Point(12, 398);
             this.labelEmail.Name = "labelEmail";
             this.labelEmail.Size = new System.Drawing.Size(36, 15);
-            this.labelEmail.TabIndex = 4;
+            this.labelEmail.TabIndex = 3;
             this.labelEmail.Text = "Email";
             // 
             // richTextBoxOrderNotes
@@ -102,7 +104,7 @@
             this.richTextBoxOrderNotes.Location = new System.Drawing.Point(12, 292);
             this.richTextBoxOrderNotes.Name = "richTextBoxOrderNotes";
             this.richTextBoxOrderNotes.Size = new System.Drawing.Size(452, 87);
-            this.richTextBoxOrderNotes.TabIndex = 5;
+            this.richTextBoxOrderNotes.TabIndex = 2;
             this.richTextBoxOrderNotes.Text = "";
             // 
             // label1
@@ -111,7 +113,7 @@
             this.label1.Location = new System.Drawing.Point(12, 274);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(123, 15);
-            this.label1.TabIndex = 6;
+            this.label1.TabIndex = 1;
             this.label1.Text = "Uwagi do zamówienia";
             // 
             // labelToPay
@@ -121,7 +123,7 @@
             this.labelToPay.Location = new System.Drawing.Point(351, 461);
             this.labelToPay.Name = "labelToPay";
             this.labelToPay.Size = new System.Drawing.Size(69, 15);
-            this.labelToPay.TabIndex = 7;
+            this.labelToPay.TabIndex = 5;
             this.labelToPay.Text = "Do zapłaty:";
             // 
             // labelTotalPrice
@@ -131,13 +133,15 @@
             this.labelTotalPrice.Location = new System.Drawing.Point(426, 461);
             this.labelTotalPrice.Name = "labelTotalPrice";
             this.labelTotalPrice.Size = new System.Drawing.Size(44, 15);
-            this.labelTotalPrice.TabIndex = 8;
+            this.labelTotalPrice.TabIndex = 6;
             this.labelTotalPrice.Text = "0,00 zł";
             // 
             // SummarizeOrderForm
             // 
+            this.AcceptButton = this.buttonPlaceOrder;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(480, 540);
             this.Controls.Add(this.labelTotalPrice);
             this.Controls.Add(this.labelToPay);
@@ -148,7 +152,9 @@
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonPlaceOrder);
             this.Controls.Add(this.dataGridViewDishesToOrder);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "SummarizeOrderForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Podsumowanie zamówienia";
             this.Load += new System.EventHandler(this.SummarizeOrderForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDishesToOrder)).EndInit();

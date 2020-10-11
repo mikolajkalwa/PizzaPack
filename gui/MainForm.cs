@@ -74,11 +74,19 @@ namespace gui
                         }
                     }
 
+                    if (chooseExtrasDialogForm.DialogResult == DialogResult.OK)
+                    {
+                        _appState.DishesInOrder.Add(dishOrder);
+                        numericUpDownDishQuantity.Value = 1;
+                    }
                 }
             }
+            else
+            {
+                _appState.DishesInOrder.Add(dishOrder);
+                numericUpDownDishQuantity.Value = 1;
+            }
 
-            _appState.DishesInOrder.Add(dishOrder);
-            numericUpDownDishQuantity.Value = 1;
 
         }
 

@@ -44,7 +44,7 @@
             this.buttonAddDishToOrder.Location = new System.Drawing.Point(599, 331);
             this.buttonAddDishToOrder.Name = "buttonAddDishToOrder";
             this.buttonAddDishToOrder.Size = new System.Drawing.Size(189, 25);
-            this.buttonAddDishToOrder.TabIndex = 0;
+            this.buttonAddDishToOrder.TabIndex = 2;
             this.buttonAddDishToOrder.Text = "Dodaj do zamówienia";
             this.buttonAddDishToOrder.UseVisualStyleBackColor = true;
             this.buttonAddDishToOrder.Click += new System.EventHandler(this.buttonAddDishToOrder_Click);
@@ -54,7 +54,7 @@
             this.buttonSummarizeOrder.Location = new System.Drawing.Point(512, 415);
             this.buttonSummarizeOrder.Name = "buttonSummarizeOrder";
             this.buttonSummarizeOrder.Size = new System.Drawing.Size(276, 23);
-            this.buttonSummarizeOrder.TabIndex = 1;
+            this.buttonSummarizeOrder.TabIndex = 5;
             this.buttonSummarizeOrder.Text = "Podsumowanie zamówienia";
             this.buttonSummarizeOrder.UseVisualStyleBackColor = true;
             this.buttonSummarizeOrder.Click += new System.EventHandler(this.buttonSummarizeOrder_Click);
@@ -65,7 +65,7 @@
             this.labelTotalPriceInfo.Location = new System.Drawing.Point(705, 378);
             this.labelTotalPriceInfo.Name = "labelTotalPriceInfo";
             this.labelTotalPriceInfo.Size = new System.Drawing.Size(38, 15);
-            this.labelTotalPriceInfo.TabIndex = 2;
+            this.labelTotalPriceInfo.TabIndex = 3;
             this.labelTotalPriceInfo.Text = "Koszt:";
             // 
             // labelCurrentValue
@@ -74,7 +74,7 @@
             this.labelCurrentValue.Location = new System.Drawing.Point(749, 378);
             this.labelCurrentValue.Name = "labelCurrentValue";
             this.labelCurrentValue.Size = new System.Drawing.Size(39, 15);
-            this.labelCurrentValue.TabIndex = 3;
+            this.labelCurrentValue.TabIndex = 4;
             this.labelCurrentValue.Text = "0,00 zł";
             // 
             // dataGridViewMenu
@@ -97,7 +97,7 @@
             this.dataGridViewMenu.ShowEditingIcon = false;
             this.dataGridViewMenu.ShowRowErrors = false;
             this.dataGridViewMenu.Size = new System.Drawing.Size(776, 302);
-            this.dataGridViewMenu.TabIndex = 4;
+            this.dataGridViewMenu.TabIndex = 0;
             this.dataGridViewMenu.Text = "dataGridView1";
             // 
             // numericUpDownDishQuantity
@@ -110,7 +110,7 @@
             0});
             this.numericUpDownDishQuantity.Name = "numericUpDownDishQuantity";
             this.numericUpDownDishQuantity.Size = new System.Drawing.Size(120, 23);
-            this.numericUpDownDishQuantity.TabIndex = 5;
+            this.numericUpDownDishQuantity.TabIndex = 1;
             this.numericUpDownDishQuantity.Value = new decimal(new int[] {
             1,
             0,
@@ -139,7 +139,9 @@
             this.Controls.Add(this.labelTotalPriceInfo);
             this.Controls.Add(this.buttonSummarizeOrder);
             this.Controls.Add(this.buttonAddDishToOrder);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PizzaPack";
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMenu)).EndInit();
