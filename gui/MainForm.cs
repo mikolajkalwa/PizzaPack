@@ -1,36 +1,35 @@
-﻿using System;
+﻿using gui.ApiClient;
+using gui.ApiClient.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using gui.ApiClient;
-using gui.ApiClient.Models;
-using Newtonsoft.Json;
 
 namespace gui
 {
     public partial class MainForm : Form
     {
+        private readonly AppState _appState;
+        private readonly OrderHelpers _orderHelpers;
         private readonly IPizzeriaApiClient _client;
-        private readonly Menu _menu;
-        private readonly ObservableCollection<DishOrder> _currentOrder = new ObservableCollection<DishOrder>();
-        public MainForm(IPizzeriaApiClient client)
+        public MainForm(IPizzeriaApiClient client, AppState appState, OrderHelpers orderHelpers)
         {
+            _appState = appState;
             _client = client;
-            _menu = _client.GetMenu();
-            _currentOrder.CollectionChanged += OnCurrentOrderChanged;
+            _orderHelpers = orderHelpers;
+            _appState.Menu = client.GetMenu();
+            _appState.DishesInOrder = new ObservableCollection<DishOrder>();
+            _appState.DishesInOrder.CollectionChanged += OnCurrentOrderChanged;
             InitializeComponent();
         }
 
         private void ShowAvailableDishes()
         {
-            dataGridViewMenu.DataSource = _menu.Dishes;
+            dataGridViewMenu.DataSource = _appState.Menu.Dishes;
 
             dataGridViewMenu.Columns["DishIdentifier"].Visible = false;
             dataGridViewMenu.Columns["DishCategory"].Visible = false;
@@ -50,11 +49,8 @@ namespace gui
 
         private void buttonAddDishToOrder_Click(object sender, EventArgs e)
         {
-            Dish selectedDish = _menu.Dishes.First(dish =>
-                dish.DishIdentifier == dataGridViewMenu.SelectedRows[0].Cells["DishIdentifier"].Value.ToString());
-
-            IList<Extras> availableExtras =
-                _menu.Extras.Where(extras => extras.DishCategory == selectedDish.DishCategory).ToList();
+            Dish selectedDish = _orderHelpers.GetDishById(dataGridViewMenu.SelectedRows[0].Cells["DishIdentifier"].Value.ToString());
+            IList<Extras> availableExtras = _orderHelpers.GetAvailableExtrasForCategory(selectedDish.DishCategory);
 
             DishOrder dishOrder = new DishOrder
             {
@@ -81,14 +77,14 @@ namespace gui
                 }
             }
 
-            _currentOrder.Add(dishOrder);
+            _appState.DishesInOrder.Add(dishOrder);
             numericUpDownDishQuantity.Value = 1;
 
         }
 
         private void buttonSummarizeOrder_Click(object sender, EventArgs e)
         {
-            using (SummarizeOrderForm summarizeOrderForm = new SummarizeOrderForm(_currentOrder, _menu, _client))
+            using (SummarizeOrderForm summarizeOrderForm = new SummarizeOrderForm(_client, _appState, _orderHelpers))
             {
                 summarizeOrderForm.ShowDialog();
 
@@ -103,33 +99,9 @@ namespace gui
             }
         }
 
-        private decimal CalculateOrderValue()
-        {
-            decimal price = 0;
-            foreach (var dishOrder in _currentOrder)
-            {
-                decimal extrasPrice = 0;
-                var selectedDish = _menu.Dishes.First(dish =>
-                    dish.DishIdentifier == dishOrder.DishIdentifier);
-                if (dishOrder.Extras != null && dishOrder.Extras.Any())
-                {
-                    foreach (var dishOrderExtra in dishOrder.Extras)
-                    {
-                        var chosenExtras = _menu.Extras.First(extras => extras.ExtrasIdentifier == dishOrderExtra);
-                        price += chosenExtras.ExtrasPrice;
-                    }
-                }
-
-                price += (selectedDish.DishPrice + extrasPrice) * dishOrder.Quantity;
-
-            }
-
-            return price;
-        }
-
         private void OnCurrentOrderChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
-            decimal orderValue = CalculateOrderValue();
+            decimal orderValue = _orderHelpers.CalculateOrderValue(_appState.DishesInOrder);
             labelCurrentValue.Text = orderValue.ToString("c", new CultureInfo("PL"));
         }
     }

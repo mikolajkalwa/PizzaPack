@@ -36,6 +36,8 @@ namespace gui
 
 
             services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
+            services.AddSingleton<AppState>();
+            services.AddSingleton<OrderHelpers>();
             services.AddScoped<IPizzeriaApiClient, PizzeriaApiClient>();
             services.AddScoped<MainForm>();
         }
