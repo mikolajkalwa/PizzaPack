@@ -18,14 +18,17 @@ namespace api.Services
             _database = database;
         }
 
-        public Menu GetMenu()
+        public async Task<Menu> GetMenu()
         {
-            var allDishes = _database.Dishes.Find(_ => true).ToEnumerable();
-            var allExtras = _database.Extras.Find(_ => true).ToEnumerable();
+            var getAllDishes = _database.Dishes.Find(_ => true).ToListAsync();
+            var getAllExtras = _database.Extras.Find(_ => true).ToListAsync();
+
+            await Task.WhenAll(getAllDishes, getAllExtras);
+            
             return new Menu
             {
-                Extras = allExtras,
-                Dishes = allDishes
+                Extras = getAllExtras.Result,
+                Dishes = getAllDishes.Result
             };
         }
 

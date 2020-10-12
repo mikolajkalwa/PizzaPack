@@ -8,6 +8,6 @@ namespace api.Services
 {
     public interface IMenuService
     {
-        public Menu GetMenu();
+        public Task<Menu> GetMenu();
     }
 }

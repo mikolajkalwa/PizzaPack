@@ -23,17 +23,17 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("PlaceOrder")]
-        public ActionResult<Order> PlaceOrder([FromBody] PlaceOrder order)
+        public async Task<ActionResult<Order>> PlaceOrder([FromBody] PlaceOrder order)
         {
-            var placedOrder = _ordersService.CreateOrder(order);
+            var placedOrder = await _ordersService.CreateOrder(order);
             return Created("GetOrdersHistory", placedOrder);
         }
 
         [HttpGet]
         [Route("OrdersHistory")]
-        public ActionResult<IEnumerable<Order>> OrderHistory()
+        public async Task<ActionResult<IEnumerable<Order>>> OrderHistory()
         {
-            return Ok(_ordersService.GetOrdersHistory());
+            return Ok(await _ordersService.GetOrdersHistory());
         }
     }
 }

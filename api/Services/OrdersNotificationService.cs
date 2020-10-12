@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Models;
+using Microsoft.Extensions.Logging;
 
 namespace api.Services
 {
@@ -15,14 +16,14 @@ namespace api.Services
             _ordersService = ordersService;
             _notificationService = notificationService;
         }
-        public Order CreateOrder(PlaceOrder order)
+        public async Task<Order> CreateOrder(PlaceOrder order)
         {
-            var placedOrder = _ordersService.CreateOrder(order);
-            _notificationService.SendNotification(order.Email, placedOrder);
+            var placedOrder = await _ordersService.CreateOrder(order);
+            await _notificationService.SendNotification(order.Email, placedOrder);
             return placedOrder;
         }
 
-        public IEnumerable<Order> GetOrdersHistory()
+        public Task<IEnumerable<Order>> GetOrdersHistory()
         {
             return _ordersService.GetOrdersHistory();
         }

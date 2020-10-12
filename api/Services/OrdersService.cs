@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using api.Configuration;
 using api.Database;
 using api.Validators;
@@ -24,16 +25,16 @@ namespace api.Services
             _menuService = menuService;
         }
 
-        public IEnumerable<Order> GetOrdersHistory()
+        public async Task<IEnumerable<Order>> GetOrdersHistory()
         {
-            return _database.Orders.Find(_ => true).SortByDescending(order => order.OrderIdentifier).ToEnumerable();
+            return (await _database.Orders.FindAsync(_ => true)).ToEnumerable().Reverse();
         }
 
-        public Order CreateOrder(PlaceOrder order)
+        public async Task<Order> CreateOrder(PlaceOrder order)
         {
             PlaceOrderValidator validator = new PlaceOrderValidator();
             ValidationResult results = validator.Validate(order);
-            
+
             if (!results.IsValid)
             {
                 var message = new StringBuilder();
@@ -46,7 +47,7 @@ namespace api.Services
 
             decimal totalPrice = 0;
             var placedOrder = new Order { Dishes = new List<OrderedDish>() };
-            var menu = _menuService.GetMenu();
+            var menu = await _menuService.GetMenu();
 
             foreach (var orderedDish in order.Dishes)
             {
@@ -113,7 +114,7 @@ namespace api.Services
             placedOrder.Notes = order.Notes;
             placedOrder.TotalPrice = totalPrice;
 
-            _database.Orders.InsertOne(placedOrder);
+            await _database.Orders.InsertOneAsync(placedOrder);
             return placedOrder;
         }
     }

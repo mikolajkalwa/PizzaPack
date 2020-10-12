@@ -1,4 +1,5 @@
-﻿using api.Services;
+﻿using System.Threading.Tasks;
+using api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -16,9 +17,9 @@ namespace api.Controllers
 
         [HttpGet]
         [Route("")]
-        public ActionResult GetMenu()
+        public async Task<ActionResult> GetMenu()
         {
-            var menu = _menuService.GetMenu();
+            var menu = await _menuService.GetMenu();
             return Ok(menu);
         }
     }

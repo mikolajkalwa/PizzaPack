@@ -8,7 +8,7 @@ namespace api.Services
 {
     public interface IOrdersService
     {
-        Order CreateOrder(PlaceOrder order);
-        IEnumerable<Order> GetOrdersHistory();
+        Task<Order> CreateOrder(PlaceOrder order);
+        Task<IEnumerable<Order>> GetOrdersHistory();
     }
 }
