@@ -20,8 +20,8 @@ namespace api.Services
 
         public Menu GetMenu()
         {
-            var allDishes = _database.Dishes.Find(_ => true).ToList();
-            var allExtras = _database.Extras.Find(_ => true).ToList();
+            var allDishes = _database.Dishes.Find(_ => true).ToEnumerable();
+            var allExtras = _database.Extras.Find(_ => true).ToEnumerable();
             return new Menu
             {
                 Extras = allExtras,
