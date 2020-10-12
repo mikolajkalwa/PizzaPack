@@ -40,7 +40,7 @@ namespace api
                     message = "Fatal error has occurred!"
                 });
 
-                _logger.LogError("Unexpected exception occured.", context.Exception);
+                _logger.LogError(context.Exception, "Unexpected exception occured.");
             }
         }
     }
