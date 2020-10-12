@@ -1,4 +1,5 @@
 using api.Configuration;
+using api.Database;
 using api.Models;
 using api.Services;
 using Microsoft.AspNetCore.Builder;
@@ -38,10 +39,11 @@ namespace api
                 provider.GetRequiredService<IOptions<SendGridSettings>>().Value
             );
 
-            services.AddSingleton<IMenuService, MenuService>();
-            services.AddSingleton<IOrdersService, OrdersService>();
+            services.AddSingleton<IMongo, Mongo>();
 
-            services.AddSingleton<INotificationService, SendGridService>();
+            services.AddScoped<IMenuService, MenuService>();
+            services.AddScoped<IOrdersService, OrdersService>();
+            services.AddScoped<INotificationService, SendGridService>();
 
             services.Decorate<IOrdersService, OrdersNotificationService>();
 

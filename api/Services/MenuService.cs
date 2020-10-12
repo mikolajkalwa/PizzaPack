@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Configuration;
+using api.Database;
 using api.Models;
 using MongoDB.Driver;
 
@@ -10,22 +11,17 @@ namespace api.Services
 {
     public class MenuService : IMenuService
     {
-        private readonly IMongoCollection<Dish> _dishes;
-        private readonly IMongoCollection<Extras> _extras;
+        private readonly IMongo _database;
 
-        public MenuService(IDatabaseSettings settings)
+        public MenuService(IMongo database)
         {
-            var client = new MongoClient(settings.ConnectionString);
-            var database = client.GetDatabase(settings.DatabaseName);
-
-            _dishes = database.GetCollection<Dish>(settings.DishesCollectionName);
-            _extras = database.GetCollection<Extras>(settings.ExtrasCollectionName);
+            _database = database;
         }
 
         public Menu GetMenu()
         {
-            var allDishes = _dishes.Find(_ => true).ToList();
-            var allExtras = _extras.Find(_ => true).ToList();
+            var allDishes = _database.Dishes.Find(_ => true).ToList();
+            var allExtras = _database.Extras.Find(_ => true).ToList();
             return new Menu
             {
                 Extras = allExtras,

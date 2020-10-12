@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using api.Configuration;
+using api.Database;
 using api.Validators;
 using FluentValidation.Results;
 
@@ -14,20 +15,18 @@ namespace api.Services
 {
     public class OrdersService : IOrdersService
     {
-        private readonly IMongoCollection<Order> _orders;
+        private readonly IMongo _database;
         private readonly IMenuService _menuService;
 
-        public OrdersService(IDatabaseSettings settings, IMenuService menuService)
+        public OrdersService(IMongo database, IMenuService menuService)
         {
-            var client = new MongoClient(settings.ConnectionString);
-            var database = client.GetDatabase(settings.DatabaseName);
+            _database = database;
             _menuService = menuService;
-            _orders = database.GetCollection<Order>(settings.OrdersCollectionName);
         }
 
         public IEnumerable<Order> GetOrdersHistory()
         {
-            return _orders.Find(_ => true).SortByDescending(bson => bson.OrderIdentifier).ToList();
+            return _database.Orders.Find(_ => true).SortByDescending(order => order.OrderIdentifier).ToEnumerable();
         }
 
         public Order CreateOrder(PlaceOrder order)
@@ -46,9 +45,7 @@ namespace api.Services
             }
 
             decimal totalPrice = 0;
-
             var placedOrder = new Order { Dishes = new List<OrderedDish>() };
-
             var menu = _menuService.GetMenu();
 
             foreach (var orderedDish in order.Dishes)
@@ -116,7 +113,7 @@ namespace api.Services
             placedOrder.Notes = order.Notes;
             placedOrder.TotalPrice = totalPrice;
 
-            _orders.InsertOne(placedOrder);
+            _database.Orders.InsertOne(placedOrder);
             return placedOrder;
         }
     }
