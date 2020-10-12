@@ -85,12 +85,13 @@ namespace gui
         private void listBoxOrders_SelectedIndexChanged(object sender, EventArgs e)
         {
             var order = (Order)listBoxOrders.SelectedItems[0];
-            DateTimeOffset date = _orderHelpers.ConvertObjectIdToDate(order.OrderIdentifier);
+            var result = _orderHelpers.TryConvertObjectIdToDateTime(order.OrderIdentifier, out DateTime date);
 
+            textBoxOrderDate.Text = result ? date.ToLocalTime().ToString() : order.OrderIdentifier;
             richTextBoxNotes.Text = order.Notes;
             textBoxTotalPrice.Text = order.TotalPrice.ToString("C", new CultureInfo("PL"));
             textBoxEmail.Text = order.Email;
-            textBoxOrderDate.Text = date.ToLocalTime().ToString();
+
             textBoxOrderidentifier.Text = order.OrderIdentifier;
 
             dataGridViewOrderedDishes.DataSource = GetDataToDisplayInOrderedDishes(order.Dishes);

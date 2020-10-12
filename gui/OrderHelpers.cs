@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
+using System.Windows.Forms;
 using gui.ApiClient;
 using gui.ApiClient.Models;
+using MongoDB.Bson;
 
 namespace gui
 {
@@ -54,10 +57,17 @@ namespace gui
             return _menu.Extras.Where(extras => extras.DishCategory == dishCategory).ToList();
         }
 
-        public DateTimeOffset ConvertObjectIdToDate(string objectId)
+        public bool TryConvertObjectIdToDateTime(string objectId, out DateTime dateTime)
         {
-            var seconds = Convert.ToInt32(objectId.Substring(0, 8), 16);
-            return DateTimeOffset.FromUnixTimeSeconds(seconds);
+            dateTime = new DateTime();
+            var result = ObjectId.TryParse(objectId, out var tmp);
+            if (!result)
+            {
+                return false;
+            }
+
+            dateTime = tmp.CreationTime;
+            return true;
         }
     }
 }
