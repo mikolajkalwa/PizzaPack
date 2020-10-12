@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using api.Configuration;
 using api.Database;
+using api.Helpers;
 using api.Validators;
 using FluentValidation.Results;
 
@@ -17,12 +18,12 @@ namespace api.Services
     public class OrdersService : IOrdersService
     {
         private readonly IMongo _database;
-        private readonly IMenuService _menuService;
+        private readonly IOrdersServiceHelpers _ordersServiceHelpers;
 
-        public OrdersService(IMongo database, IMenuService menuService)
+        public OrdersService(IMongo database, IOrdersServiceHelpers ordersServiceHelpers)
         {
             _database = database;
-            _menuService = menuService;
+            _ordersServiceHelpers = ordersServiceHelpers;
         }
 
         public async Task<IEnumerable<Order>> GetOrdersHistory()
@@ -32,8 +33,8 @@ namespace api.Services
 
         public async Task<Order> CreateOrder(PlaceOrder order)
         {
-            PlaceOrderValidator validator = new PlaceOrderValidator();
-            ValidationResult results = validator.Validate(order);
+            var validator = new PlaceOrderValidator();
+            var results = validator.Validate(order);
 
             if (!results.IsValid)
             {
@@ -45,21 +46,11 @@ namespace api.Services
                 throw new ArgumentException(message.ToString());
             }
 
-            decimal totalPrice = 0;
             var placedOrder = new Order { Dishes = new List<OrderedDish>() };
-            var menu = await _menuService.GetMenu();
 
             foreach (var orderedDish in order.Dishes)
             {
-
-                var menuEntryForOrderedDish = menu.Dishes.SingleOrDefault(d => d.DishIdentifier == orderedDish.DishIdentifier);
-
-                if (menuEntryForOrderedDish == null)
-                {
-                    throw new ArgumentException($"Dish with identifier {orderedDish.DishIdentifier} does not exists!");
-                }
-
-                decimal orderedExtrasPrice = 0;
+                var menuEntryForOrderedDish = await _ordersServiceHelpers.GetDishById(orderedDish.DishIdentifier);
                 List<OrderedExtras> orderedExtrasForDish = null;
 
                 if (orderedDish.Extras != null)
@@ -73,19 +64,14 @@ namespace api.Services
 
                     foreach (var orderedExtras in orderedDish.Extras)
                     {
-                        var menuEntryForOrderedExtras = menu.Extras.SingleOrDefault(e => e.ExtrasIdentifier == orderedExtras);
 
-                        if (menuEntryForOrderedExtras == null)
-                        {
-                            throw new ArgumentException($"Extras with identifier {orderedExtras} does not exists!");
-                        }
+                        var menuEntryForOrderedExtras = await _ordersServiceHelpers.GetExtrasById(orderedExtras);
 
                         if (menuEntryForOrderedExtras.DishCategory != menuEntryForOrderedDish.DishCategory)
                         {
                             throw new ArgumentException($"Cannot order extras from category {menuEntryForOrderedExtras.DishCategory} for dish from category {menuEntryForOrderedDish.DishCategory}");
                         }
 
-                        orderedExtrasPrice += menuEntryForOrderedExtras.ExtrasPrice;
 
                         orderedExtrasForDish.Add(new OrderedExtras
                         {
@@ -95,9 +81,6 @@ namespace api.Services
                         });
                     }
                 }
-
-                totalPrice += (menuEntryForOrderedDish.DishPrice + orderedExtrasPrice) * orderedDish.Quantity;
-
 
                 placedOrder.Dishes.Add(new OrderedDish
                 {
@@ -109,6 +92,8 @@ namespace api.Services
                 });
 
             }
+
+            decimal totalPrice = await _ordersServiceHelpers.CalculateOrderValue(order.Dishes);
 
             placedOrder.Email = order.Email;
             placedOrder.Notes = order.Notes;

@@ -1,5 +1,6 @@
 using api.Configuration;
 using api.Database;
+using api.Helpers;
 using api.Models;
 using api.Services;
 using Microsoft.AspNetCore.Builder;
@@ -47,6 +48,7 @@ namespace api
             services.AddScoped<IMenuService, MenuService>();
             services.AddScoped<IOrdersService, OrdersService>();
             services.AddScoped<INotificationService, SendGridService>();
+            services.AddScoped<IOrdersServiceHelpers, OrdersServiceHelpers>();
 
             services.Decorate<IOrdersService, OrdersNotificationService>();
 
