@@ -30,7 +30,7 @@ namespace gui
                     foreach (var dishOrderExtra in dishOrder.Extras)
                     {
                         var chosenExtras = GetExtrasById(dishOrderExtra);
-                        price += chosenExtras.ExtrasPrice;
+                        extrasPrice += chosenExtras.ExtrasPrice;
                     }
                 }
 
