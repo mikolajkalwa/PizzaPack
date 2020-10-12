@@ -25,18 +25,8 @@ namespace api.Controllers
         [Route("PlaceOrder")]
         public ActionResult<Order> PlaceOrder([FromBody] PlaceOrder order)
         {
-            try
-            {
-                var placedOrder = _ordersService.CreateOrder(order);
-                return Created("GetOrdersHistory", placedOrder);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new
-                {
-                    ex.Message
-                });
-            }
+            var placedOrder = _ordersService.CreateOrder(order);
+            return Created("GetOrdersHistory", placedOrder);
         }
 
         [HttpGet]
