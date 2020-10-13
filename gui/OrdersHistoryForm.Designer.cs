@@ -100,7 +100,6 @@
             // 
             // textBoxOrderidentifier
             // 
-            this.textBoxOrderidentifier.Enabled = false;
             this.textBoxOrderidentifier.Location = new System.Drawing.Point(6, 568);
             this.textBoxOrderidentifier.Name = "textBoxOrderidentifier";
             this.textBoxOrderidentifier.ReadOnly = true;
@@ -109,7 +108,6 @@
             // 
             // textBoxOrderDate
             // 
-            this.textBoxOrderDate.Enabled = false;
             this.textBoxOrderDate.Location = new System.Drawing.Point(8, 524);
             this.textBoxOrderDate.Name = "textBoxOrderDate";
             this.textBoxOrderDate.ReadOnly = true;
@@ -127,7 +125,6 @@
             // 
             // textBoxEmail
             // 
-            this.textBoxEmail.Enabled = false;
             this.textBoxEmail.Location = new System.Drawing.Point(7, 479);
             this.textBoxEmail.Name = "textBoxEmail";
             this.textBoxEmail.ReadOnly = true;
@@ -154,7 +151,6 @@
             // 
             // textBoxTotalPrice
             // 
-            this.textBoxTotalPrice.Enabled = false;
             this.textBoxTotalPrice.Location = new System.Drawing.Point(8, 434);
             this.textBoxTotalPrice.Name = "textBoxTotalPrice";
             this.textBoxTotalPrice.ReadOnly = true;
@@ -172,6 +168,7 @@
             this.dataGridViewOrderedDishes.Name = "dataGridViewOrderedDishes";
             this.dataGridViewOrderedDishes.RowHeadersVisible = false;
             this.dataGridViewOrderedDishes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridViewOrderedDishes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewOrderedDishes.Size = new System.Drawing.Size(538, 260);
             this.dataGridViewOrderedDishes.TabIndex = 3;
             this.dataGridViewOrderedDishes.Text = "dataGridView1";
@@ -196,7 +193,6 @@
             // 
             // richTextBoxNotes
             // 
-            this.richTextBoxNotes.Enabled = false;
             this.richTextBoxNotes.Location = new System.Drawing.Point(6, 40);
             this.richTextBoxNotes.Name = "richTextBoxNotes";
             this.richTextBoxNotes.ReadOnly = true;
