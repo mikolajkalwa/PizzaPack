@@ -1,0 +1,573 @@
+{
+	"info": {
+		"_postman_id": "2a2f8d96-bb0d-4545-9d1f-fcd75075b606",
+		"name": "MetaPizza",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "SmokeTest",
+			"item": [
+				{
+					"name": "HealthCheck",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f40518d3-6859-47d4-b782-535a1d6ac111",
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Healthcheck returns Healthy\", () => {\r",
+									"    pm.expect(pm.response.text()).to.be.equal(\"Healthy\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/health",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "MenuController",
+			"item": [
+				{
+					"name": "GetMenu",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f727ad51-70a8-472a-8d91-22184f855f7a",
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body contains dishes array\", () => {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"dishes\")\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body contains extras array\", () => {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"extras\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/menu",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"menu"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "OrdersController",
+			"item": [
+				{
+					"name": "GetOrders History",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5573906d-8762-4dcd-8796-82a0ed3f9b28",
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/orders/ordershistory",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"ordershistory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PlaceOrder with correct data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bd39d3b7-3efc-419f-af09-7747b491d57c",
+								"exec": [
+									"pm.test(\"Status code is 201\", () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is present\", () => {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response must have a body\", () => {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body includes provided email\", () => {\r",
+									"    const requestBody = JSON.parse(pm.request.body.raw);\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.expect(responseBody.email).to.eql(requestBody.email);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body includes data about ordered dishes\", () => {\r",
+									"    const requestBody = JSON.parse(pm.request.body.raw);\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.expect(responseBody.dishes.length).to.eql(requestBody.dishes.length);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"foo@bar.com\",\r\n    \"dishes\": [\r\n        {\r\n            \"dishIdentifier\": \"5f80cb3310115a2c8058a1d9\",\r\n            \"quantity\": 1\r\n        },\r\n        {\r\n            \"dishIdentifier\": \"5f80c7de5508d7198e6e4821\",\r\n            \"quantity\": 2,\r\n            \"extras\": [ \"5f80cbf010115a2c8058a1e4\", \"5f80cbf010115a2c8058a1e3\"]\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/orders/PlaceOrder",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"PlaceOrder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PlaceOrder with washing machine manual in notes section",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "67242b98-d205-42c3-858e-de5a9563814e",
+								"exec": [
+									"pm.test(\"Status code is 201\", () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is present\", () => {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response must have a body\", () => {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body includes provided email\", () => {\r",
+									"    const requestBody = JSON.parse(pm.request.body.raw);\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.expect(responseBody.email).to.eql(requestBody.email);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body includes data about ordered dishes\", () => {\r",
+									"    const requestBody = JSON.parse(pm.request.body.raw);\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.expect(responseBody.dishes.length).to.eql(requestBody.dishes.length);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body includes order notes property\", () => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.expect(responseBody).to.have.property(\"notes\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body order notes property is the same as notes passed in request body\", () => {\r",
+									"    const requestBody = JSON.parse(pm.request.body.raw);\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.expect(responseBody.notes).to.eql(requestBody.notes);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"foo@bar.com\",\r\n    \"notes\": \"www.beko.com\\r\\nWMY 9048 LB1\\r\\nDocument Number 2820523825\\/ 07-01-14.(22:22)\\r\\nWashing Machine\\r\\nUser\\u2019s Manual \\r\\nPlease read this user manual first!\\r\\nDear Customer,\\r\\nThank you for prefering an Beko product. We hope that you get the best results from your product which\\r\\nhas been manufactured with high quality and state-of-the-art technology. Therefore, please read this\\r\\nentire user manual and all other accompanying documents carefully before using the product and keep\\r\\nit as a reference for future use. If you handover the product to someone else, give the user manual as\\r\\nwell. Follow all warnings and information in the user manual.\\r\\nRemember that this user manual is also applicable for several other models. Differences between\\r\\nmodels will be identified in the manual.\\r\\nExplanation of symbols\\r\\nThroughout this user manual the following symbols are used:\\r\\nC Important information or useful hints\\r\\nabout usage.\\r\\nA Warning for hazardous situations with\\r\\nregard to life and property.\\r\\nB Warning for electric shock.\\r\\nPackaging materials of the product\\r\\nare manufactured from recyclable\\r\\nmaterials in accordance with our\\r\\nNational Environment Regulations.\\r\\nDo not dispose of the packaging materials together with the domestic or other wastes. Take them to the\\r\\npackaging material collection points designated by the local authorities.\\r\\nThis product was manufactured using the latest technology in environmentally friendly conditions.\\r\\n3 \\/ EN\\r\\nTABLE OF CONTENTS\\r\\n1 Important instructions for safety and\\r\\nenvironment 4\\r\\n1.1 General safety. . . . . . . . . . . . . . . . . . . . . . . 4\\r\\n1.2 Intended use. . . . . . . . . . . . . . . . . . . . . . . . 5\\r\\n1.3 Children's safety . . . . . . . . . . . . . . . . . . . . . 6\\r\\n1.4 Package information . . . . . . . . . . . . . . . . . . 6\\r\\n1.5 Disposing of the waste product . . . . . . . . . . 6\\r\\n1.6 Compliance with WEEE Directive . . . . . . . . . 7\\r\\n2 Your washing machine 8\\r\\n2.1 Overview. . . . . . . . . . . . . . . . . . . . . . . . . . . 8\\r\\n2.2 Package Contents. . . . . . . . . . . . . . . . . . . . 9\\r\\n2.3 Technical specifications. . . . . . . . . . . . . . . 10\\r\\n3 Installation 11\\r\\n3.1 Appropriate installation location . . . . . . . . . 11\\r\\n3.2 Removing packaging reinforcement. . . . . . 11\\r\\n3.3 Removing the transportation locks . . . . . . . 11\\r\\n3.4 Connecting water supply . . . . . . . . . . . . . . 12\\r\\n3.5 Connecting to the drain . . . . . . . . . . . . . . . 13\\r\\n3.6 Adjusting the feet . . . . . . . . . . . . . . . . . . . 13\\r\\n3.7 Electrical connection . . . . . . . . . . . . . . . . . 14\\r\\n4 Preparation 15\\r\\n4.1 Sorting the laundry . . . . . . . . . . . . . . . . . . 15\\r\\n4.2 Preparing laundry for washing . . . . . . . . . . 16\\r\\n4.3 Things to be done for energy saving. . . . . . 16\\r\\n4.4 First use . . . . . . . . . . . . . . . . . . . . . . . . . . 17\\r\\n4.5 Correct load capacity. . . . . . . . . . . . . . . . . 17\\r\\n4.6 Loading the laundry. . . . . . . . . . . . . . . . . . 17\\r\\n4.7 Using detergent and softener. . . . . . . . . . . 18\\r\\n5 Operating the product 20\\r\\n5.1 Control panel. . . . . . . . . . . . . . . . . . . . . . . 20\\r\\n5.2 Display symbols 21\\r\\n5.3 Preparing the machine . . . . . . . . . . . . . . . .22\\r\\n5.4 Programme selection. . . . . . . . . . . . . . . . . 22\\r\\n5.5 Programmes . . . . . . . . . . . . . . . . . . . . . . 22\\r\\n5.8 Temperature selection . . . . . . . . . . . . . . . . 26\\r\\n5.9 Spin speed selection . . . . . . . . . . . . . . . . . 26\\r\\n5.10 Programme and consumption table . . . . . 28\\r\\n5.11 Auxiliary function selection. . . . . . . . . . . . 29\\r\\n5.12 End Time. . . . . . . . . . . . . . . . . . . . . . . . . 30\\r\\n5.13 Starting the programme. . . . . . . . . . . . . . 30\\r\\n5.14 Loading door lock . . . . . . . . . . . . . . . . . . 31\\r\\n5.15 Changing the selections after the\\r\\nprogramme has started. . . . . . . . . . . . . . 31\\r\\n5.16 Child Lock. . . . . . . . . . . . . . . . . . . . . . . . 31\\r\\n5.17 Canceling the programme . . . . . . . . . . . . 32\\r\\n5.18 End of programme . . . . . . . . . . . . . . . . . .32\\r\\n5.19 Adjusting the VOLUME level. . . . . . . . . . . 32\\r\\n6 Maintenance and cleaning 33\\r\\n6.1 Cleaning the detergent drawer. . . . . . . . . . 33\\r\\n6.2 Cleaning the loading door and the drum. . . 33\\r\\n6.3 Cleaning the body and control panel. . . . . . 34\\r\\n6.4 Cleaning the water intake filters. . . . . . . . . 34\\r\\n6.5 Draining remaining water and cleaning the\\r\\npump filter . . . . . . . . . . . . . . . . . . . . . . . 34\\r\\n7 Troubleshooting 36\\r\\nThis product was manufactured using the latest technology in environmentally friendly conditions.\\r\\n4 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\n1 Important instructions for safety and environment\\r\\nThis section contains safety instructions that will help protect from risk of\\r\\npersonal injury or property damage. Failure to follow these instructions shall\\r\\nvoid any warranty.\\r\\n1.1 General safety\\r\\n\\u2022 This product can be used by children at and above 8 years old and by persons\\r\\nwhose physical, sensory or mental capabilities were not fully developed or\\r\\nwho lack experience and knowledge provided that they are supervised or\\r\\ntrained on the safe usage of the product and the risks it brings out. Children\\r\\nmust not play with the product. Cleaning and maintenance works should not\\r\\nbe performed by children unless they are supervised by someone.\\r\\n\\u2022 Never place the product on a carpet-covered floor. Otherwise, lack of airflow\\r\\nbeneath the machine will cause electrical parts to overheat. This will cause\\r\\nproblems with your product.\\r\\n\\u2022 If the product has a failure, it should not be operated unless it is repaired by\\r\\nthe Authorized Service Agent. There is the risk of electric shock!\\r\\n\\u2022 This product is designed to resume operating in the event of powering on after\\r\\na power interruption. If you wish to cancel the programme, see \\\"Cancelling\\r\\nthe programme\\\" section.\\r\\n\\u2022 Connect the product to a grounded outlet protected by a 16 A fuse. Do not\\r\\nneglect to have the grounding installation made by a qualified electrician. Our\\r\\ncompany shall not be liable for any damages that will arise when the product\\r\\nis used without grounding in accordance with the local regulations.\\r\\n\\u2022 The water supply and draining hoses must be securely fastened and remain\\r\\nundamaged. Otherwise, there is the risk of water leakage.\\r\\n\\u2022 Never open the loading door or remove the filter while there is still water in the\\r\\ndrum. Otherwise, risk of flooding and injury from hot water will occur.\\r\\n\\u2022 Do not force open the locked loading door. The loading door will be ready to\\r\\nopen just a few minutes after the washing cycle comes to an end. In case of\\r\\nforcing the loading door to open, the door and the lock mechanism may get\\r\\ndamaged.\\r\\n\\u2022 Unplug the product when not in use.\\r\\n\\u2022 Never wash the product by spreading or pouring water onto it! There is the\\r\\nrisk of electric shock!\\r\\n\\u2022 Never touch the plug with wet hands! Never unplug by pulling on the cable,\\r\\nalways pull out by grabbing the plug.\\r\\nWashing Machine \\/User\\u2019s Manual 5 \\/ EN\\r\\nImportant instructions for safety and environment\\r\\n\\u2022 Use detergents, softeners and supplements suitable for automatic washing\\r\\nmachines only.\\r\\n\\u2022 Follow the instructions on the textile tags and on the detergent package.\\r\\n\\u2022 The product must be unplugged during installation, maintenance, cleaning\\r\\nand repairing procedures.\\r\\n\\u2022 Always have the installation and repairing procedures carried out by the\\r\\nAuthorized Service Agent. Manufacturer shall not be held liable\\r\\nfor damages that may arise from procedures carried out by unauthorized\\r\\npersons.\\r\\n\\u2022 If the supply cord is damaged, it must be replaced by the manufacturer, its\\r\\nservice agent or similary qualified persons in order to avoid a hazard.\\r\\n\\u2022 If the power cable is damaged, it must be replaced by the manufacturer,\\r\\nafter sales service or a similarly qualified person (preferably an electrician) or\\r\\nsomeone designated by the importer in order to avoid possible risks.\\r\\n\\u2022 Place the product on a rigid, flat and level surface.\\r\\n\\u2022 Do not place it on a long-pile rug or similar surfaces.\\r\\n\\u2022 Do not place the product on a high platform or near the edge on a cascaded\\r\\nsurface.\\r\\n\\u2022 Do not place the product on the power cable.\\r\\n\\u2022 Never use sponge or scrub materials. These will damage the painted, chrome\\r\\nplated and plastic surfaces.\\r\\n1.2 Intended use\\r\\n\\u2022 This product has been designed for domestic use. It is not suitable for\\r\\ncommercial use and it must not be used out of its intended use.\\r\\n\\u2022 The product must only be used for washing and rinsing of laundry that are\\r\\nmarked accordingly.\\r\\n\\u2022 The manufacturer waives any responsibility arisen from incorrect usage or\\r\\ntransportation.\\r\\n\\u2022 The service life of your product is 10 years. During this period, original spare\\r\\nparts will be available to operate the appliance properly.\\r\\n6 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\nImportant instructions for safety and environment\\r\\n1.3 Children's safety\\r\\n\\u2022 Packaging materials are dangerous to children. Keep packaging materials in a\\r\\nsafe place away from reach of the children.\\r\\n\\u2022 Electrical products are dangerous for the children. Keep children away from\\r\\nthe product when it is in use. Do not let them to tamper with the product. Use\\r\\nchild lock to prevent children from intervening with the product.\\r\\n\\u2022 Do not forget to close the loading door when leaving the room where the\\r\\nproduct is located.\\r\\n\\u2022 Store all detergents and additives in a safe place away from the reach of\\r\\nthe children by closing the cover of the detergent container or sealing the\\r\\ndetergent package.\\r\\nWhile washing the laundry at high temperatures, the loading\\r\\ndoor glass becomes hot. Therefore, keep especially the\\r\\nchildren away from the loading door of the machine while the\\r\\nwashing operation is in progress.\\r\\n1.4 Package information\\r\\n\\u2022 Packaging materials of the product are manufactured from recyclable\\r\\nmaterials in accordance with our National Environment Regulations. Do\\r\\nnot dispose of the packaging materials together with the domestic or other\\r\\nwastes. Take them to the packaging material collection points designated by\\r\\nthe local authorities.\\r\\n1.5 Disposing of the waste product\\r\\n\\u2022 This product has been manufactured with high quality parts and materials\\r\\nwhich can be reused and are suitable for recycling. Therefore, do not dispose\\r\\nthe product with normal domestic waste at the end of its service life. Take it\\r\\nto a collection point for the recycling of electrical and electronic equipment.\\r\\nPlease consult your local authorities to learn the nearest collection point. Help\\r\\nprotect the environment and natural resources by recycling used products. For\\r\\nchildren's safety, cut the power cable and break the locking mechanism of the\\r\\nloading door so that it will be non-functional before disposing of the product.\\r\\nWashing Machine \\/User\\u2019s Manual 7 \\/ EN\\r\\nImportant instructions for safety and environment\\r\\n1.6 Compliance with WEEE Directive\\r\\n This product complies with EU WEEE Directive (2012\\/19\\/EU).\\r\\nThis product bears a classification symbol for waste electrical\\r\\nand electronic equipment (WEEE).\\r\\nThis product has been manufactured with high quality parts\\r\\nand materials which can be reused and are suitable for\\r\\nrecycling. Do not dispose of the waste product with normal\\r\\ndomestic and other wastes at the end of its service life. Take\\r\\nit to the collection center for the recycling of electrical and\\r\\nelectronic equipment. Please consult your local authorities to\\r\\nlearn about these collection centers.\\r\\nCompliance with RoHS Directive:\\r\\nThe product you have purchased complies with EU RoHS Directive (2011\\/65\\/\\r\\nEU). It does not contain harmful and prohibited materials specified in the\\r\\nDirective.\\r\\n8 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\n2 Your washing machine\\r\\n2.1 Overview\\r\\n1\\r\\n2\\r\\n3\\r\\n4\\r\\n5\\r\\n6\\r\\n7\\r\\n8\\r\\n1- Power cable\\r\\n2- Top panel\\r\\n3- Control panel\\r\\n4- Drain hose\\r\\n5- Loading door\\r\\n6- Filter cap\\r\\n7- Adjustable feet\\r\\n8- Detergent drawer\\r\\nWashing Machine \\/User\\u2019s Manual 9 \\/ EN\\r\\nYour washing machine\\r\\n2.2 Package Contents\\r\\n1\\r\\n2\\r\\n3 4\\r\\na b c\\r\\n5\\r\\n6\\r\\n7\\r\\n8\\r\\n1- Power cable\\r\\n2- Drain hose\\r\\n3- Transportation safety bolts *\\r\\n4- Mains water inlet hose (One of the following filter types is used for the mains hose connection.)\\r\\n a- Electronic water shut-off\\r\\n b- Mechanical water shut-off\\r\\n c- Standard\\r\\n5- Liquid detergent container**\\r\\n6- User Manual\\r\\n7- Blind plug***\\r\\n8- Plastic plug assembly\\r\\n* Number of transportation safety bolts may change depending on the model of your machine.\\r\\n** This may be supplied with the machine depending on the model of your machine.\\r\\n*** This is supplied if your machine is equipped with double water inlet.\\r\\n10 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\nYour washing machine\\r\\nWMY 9048 LB1\\r\\n9\\r\\n84\\r\\n60\\r\\n60\\r\\n74\\r\\n220-240 V \\/ 50Hz\\r\\n10\\r\\n2000-2350\\r\\n1400\\r\\n0.64\\r\\n0.44\\r\\n958\\r\\n- \\/ \\u2022\\r\\nM0000\\r\\n2.3 Technical specifications\\r\\nModels (EN)\\r\\nMaximum dry laundry capacity (kg)\\r\\nHeight (cm)\\r\\nWidth (cm)\\r\\nDepth (cm)\\r\\nNet weight (\\u00B14 kg.)\\r\\nElectrical input (V\\/Hz)\\r\\nTotal current (A)\\r\\nTotal power (W)\\r\\nSpin speed (rpm\\/ min., max.)\\r\\nStand-by mode power (W)\\r\\nOff-mode power (W)\\r\\nMain model code\\r\\nSingle Water inlet \\/ Double Water inlet\\r\\n Woolmark No:\\r\\n\\u2022 Available\\r\\nC Technical specifications may be changed without prior notice to improve the quality of the product.\\r\\nC Figures in this manual are schematic and may not match the product exactly.\\r\\nC Values stated on the product labels or in the documentation accompanying it are obtained in laboratory\\r\\nconditions in accordance with the relevant standards. Depending on operational and environmental\\r\\nconditions of the product, these values may vary.\\r\\n\\u201CThe wool wash cycle of this machine has been approved by The Woolmark\\r\\nCompany for the washing of machine washable wool products provided that the\\r\\nproducts are washed according to the instructions on the garment label and those\\r\\nissued by the manufacturer of this washing machine. M0000.\\u201D\\r\\n\\u201CIn UK, Eire, Hong Kong and India the Woolmark trade mark is a Certification trade\\r\\nmark.\\u201D\\r\\nWashing Machine \\/User\\u2019s Manual 11 \\/ EN\\r\\n3 Installation\\r\\nRefer to the nearest Authorised Service Agent for\\r\\ninstallation of the product. To make the product\\r\\nready for use, review the information in the user\\r\\nmanual and make sure that the electricity, tap\\r\\nwater supply and water drainage systems are\\r\\nappropriate before calling the Authorized Service\\r\\nAgent. If they are not, call a qualified technician\\r\\nand plumber to have any necessary arrangements\\r\\ncarried out.\\r\\nC Preparation of the location and electrical,\\r\\ntap water and waste water installations\\r\\nat the place of installation is under\\r\\ncustomer's responsibility.\\r\\nB WARNING: Installation and electrical\\r\\nconnections of the product must be\\r\\ncarried out by the Authorized Service\\r\\nAgent. Manufacturer shall not be held\\r\\nliable for damages that may arise from\\r\\nprocedures carried out by unauthorized\\r\\npersons.\\r\\nA WARNING: Prior to installation, visually\\r\\ncheck if the product has any defects on\\r\\nit. If so, do not have it installed. Damaged\\r\\nproducts cause risks for your safety.\\r\\nC Make sure that the water inlet and\\r\\ndischarge hoses as well as the power\\r\\ncable are not folded, pinched or crushed\\r\\nwhile pushing the product into its place\\r\\nafter installation or cleaning procedures.\\r\\n3.1 Appropriate installation location\\r\\n\\u2022 Place the machine on a rigid floor. Do not place\\r\\nit on a long pile rug or similar surfaces.\\r\\n\\u2022 Total weight of the washing machine and the\\r\\ndryer -with full load- when they are placed\\r\\non top of each other reaches to approx. 180\\r\\nkilograms. Place the product on a solid and flat\\r\\nfloor that has sufficient load carrying capacity!\\r\\n\\u2022 Do not place the product on the power cable.\\r\\n\\u2022 Do not install the product at places where\\r\\ntemperature may fall below 0\\u00BAC.\\r\\n\\u2022 Place the product at least 1 cm away from the\\r\\nedges of other furniture.\\r\\n3.2 Removing packaging\\r\\nreinforcement\\r\\nTilt the machine backwards to remove the\\r\\npackaging reinforcement. Remove the packaging\\r\\nreinforcement by pulling the ribbon.\\r\\n3.3 Removing the\\r\\ntransportation locks\\r\\nA WARNING: Do not remove the\\r\\ntransportation locks before taking out the\\r\\npackaging reinforcement.\\r\\nA WARNING: Remove the transportation\\r\\nsafety bolts before operating the washing\\r\\nmachine! Otherwise, the product will be\\r\\ndamaged.\\r\\n1. Loosen all the bolts with a suitable spanner until\\r\\nthey rotate freely (C).\\r\\n2. Remove transportation safety bolts by turning\\r\\nthem gently.\\r\\n12 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\nInstallation\\r\\n3. Attach the plastic covers supplied in the User\\r\\nManual bag into the holes on the rear panel. (P)\\r\\nC Keep the transportation safety bolts in\\r\\na safe place to reuse when the washing\\r\\nmachine needs to be moved again in the\\r\\nfuture.\\r\\nC Never move the product without the\\r\\ntransportation safety bolts properly fixed\\r\\nin place!\\r\\n3.4 Connecting water supply\\r\\nC The water supply pressure required to run\\r\\nthe product is between 1 to 10 bars (0.1\\r\\n\\u2013 1 MPa). It is necessary to have 10 \\u2013 80\\r\\nliters of water flowing from the fully open\\r\\ntap in one minute to have your machine\\r\\nrun smoothly. Attach a pressure reducing\\r\\nvalve if water pressure is higher.\\r\\nC If you are going to use the double waterinlet product as a single (cold) water-inlet\\r\\nunit, you must install the supplied stopper\\r\\nto the hot water valve before operating the\\r\\nproduct. (Applies for the products supplied\\r\\nwith a blind stopper group.)\\r\\nA WARNING: Models with a single water\\r\\ninlet should not be connected to the hot\\r\\nwater tap. In such a case the laundry will\\r\\nget damaged or the product will switch to\\r\\nprotection mode and will not operate.\\r\\nA WARNING: Do not use old or used water\\r\\ninlet hoses on the new product. It may\\r\\ncause stains on your laundry.\\r\\n1. Connect the special hoses supplied with the\\r\\nproduct to the water inlets on the product. Red\\r\\nhose (left) (max. 90 \\u00BAC) is for hot water inlet,\\r\\nblue hose (right) (max. 25 \\u00BAC) is for cold water\\r\\ninlet.\\r\\nA WARNING: Ensure that the cold and\\r\\nhot water connections are made correctly\\r\\nwhen installing the product. Otherwise,\\r\\nyour laundry will come out hot at the end\\r\\nof the washing process and wear out.\\r\\n2. Tighten all hose nuts by hand. Never use a tool\\r\\nwhen tightening the nuts.\\r\\n3.Open the taps completely after making the\\r\\nhose connection to check for water leaks at\\r\\nthe connection points. If any leaks occur, turn\\r\\noff the tap and remove the nut. Retighten the\\r\\nnut carefully after checking the seal. To prevent\\r\\nwater leakages and damages caused by them,\\r\\nkeep the taps closed when the machine is not\\r\\nin use.\\r\\nWashing Machine \\/User\\u2019s Manual 13 \\/ EN\\r\\nInstallation\\r\\n3.5 Connecting to the drain\\r\\n\\u2022 The end of the drain hose must be directly\\r\\nconnected to the wastewater drain or to the\\r\\nwashbasin.\\r\\nA WARNING: Your house will be flooded\\r\\nif the hose comes out of its housing\\r\\nduring water discharge. Moreover, there\\r\\nis risk of scalding due to high washing\\r\\ntemperatures! To prevent such situations\\r\\nand to ensure smooth water intake and\\r\\ndischarge of the machine, fix the end\\r\\nof the discharge hose tightly so that it\\r\\ncannot come out.\\r\\n\\u2022 The hose should be attached to a height of at\\r\\nleast 60 cm, and 90 cm at most.\\r\\n\\u2022 In case the hose is elevated after laying it on\\r\\nthe floor level or close to the ground (less than\\r\\n60 cm above the ground), water discharge\\r\\nbecomes more difficult and the laundry may\\r\\ncome out excessively wet. Therefore, follow the\\r\\nheights described in the figure.\\r\\n\\u2022 To prevent flowing of dirty water back into the\\r\\nmachine and to allow for easy discharge, do not\\r\\nimmerse the hose end into the dirty water or do\\r\\nnot drive it in the drain more than 15 cm. If it is\\r\\ntoo long, cut it short.\\r\\n\\u2022 The end of the hose should not be bent, it\\r\\nshould not be stepped on and the hose must\\r\\nnot be pinched between the drain and the\\r\\nmachine.\\r\\n\\u2022 If the length of the hose is too short, use it by\\r\\nadding an original extension hose. Length of the\\r\\nhose may not be longer than 3.2 m. To avoid\\r\\nwater leak failures, the connection between\\r\\nthe extension hose and the drain hose of the\\r\\nproduct must be fitted well with an appropriate\\r\\nclamp as not to come off and leak.\\r\\n3.6 Adjusting the feet\\r\\nA WARNING: In order to ensure that\\r\\nthe product operates more silently\\r\\nand vibration-free, it must stand level\\r\\nand balanced on its feet. Balance the\\r\\nmachine by adjusting the feet. Otherwise,\\r\\nthe product may move from its place and\\r\\ncause crushing and vibration problems.\\r\\n1. Loosen the lock nuts on the feet by hand.\\r\\n2. Adjust the feet until the product stands level\\r\\nand balanced.\\r\\n3. Tighten all lock nuts again by hand.\\r\\nA WARNING: Do not use any tools to\\r\\nloosen the lock nuts. Otherwise, they will\\r\\nget damaged.\\r\\n14 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\nInstallation\\r\\n3.7 Electrical connection\\r\\nConnect the product to a grounded outlet\\r\\nprotected by a 16 A fuse. Our company shall not\\r\\nbe liable for any damages that will arise when the\\r\\nproduct is used without grounding in accordance\\r\\nwith the local regulations.\\r\\n\\u2022 Connection must comply with national\\r\\nregulations.\\r\\n\\u2022 Power cable plug must be within easy reach\\r\\nafter installation.\\r\\n\\u2022 If the current value of the fuse or breaker in the\\r\\nhouse is less than 16 Amps, have a qualified\\r\\nelectrician install a 16 Amp fuse.\\r\\n\\u2022 The voltage specified in the \\\"Technical\\r\\nspecifications\\\" section must be equal to your\\r\\nmains voltage.\\r\\n\\u2022 Do not make connections via extension cables\\r\\nor multi-plugs.\\r\\nB WARNING: Damaged power cables\\r\\nmust be replaced by the Authorized\\r\\nService Agents.\\r\\nTransportation of the product\\r\\n1. Unplug the product before transporting it.\\r\\n2. Remove water drain and water supply\\r\\nconnections.\\r\\n3.Drain all water that has remained in the\\r\\nproduct. See 7.5\\r\\n4. Install transportation safety bolts in the reverse\\r\\norder of removal procedure; see 3.3.\\r\\nC Never move the product without the\\r\\ntransportation safety bolts properly fixed\\r\\nin place!\\r\\nA WARNING: Packaging materials are\\r\\ndangerous to children. Keep packaging\\r\\nmaterials in a safe place away from\\r\\nreach of the children.\\r\\nWashing Machine \\/User\\u2019s Manual 15 \\/ EN\\r\\n4 Preparation\\r\\n4.1 Sorting the laundry\\r\\n\\u2022 Sort laundry according to type of fabric, colour, and degree of soiling and allowable water\\r\\ntemperature.\\r\\n\\u2022 Always obey the instructions given on the garment tags.\\r\\nLAUNDRY WASH SYMBOLS\\r\\nMachine\\r\\nWash\\r\\nSymbols\\r\\nNormal wash\\r\\nNo Iron\\r\\nSensitiveDelicate\\r\\nwash\\r\\nHand wash\\r\\nNot washable\\r\\nNo Spin\\r\\nWASH Water\\r\\nTemperatures\\r\\nMaximum 950\\r\\nC 700\\r\\nC 600\\r\\nC 500\\r\\nC 400\\r\\nC 300\\r\\nC\\r\\nSymbol(s) \\uF06C\\uF06C\\uF06C\\r\\n\\uF06C\\uF06C\\uF06C\\r\\n\\uF06C\\uF06C\\uF06C\\r\\n\\uF06C\\uF06C\\r\\n\\uF06C\\uF06C\\r\\n\\uF06C\\uF06C\\r\\n\\uF06C\\uF06C\\uF06C \\uF06C\\uF06C \\uF06C\\r\\nDrying\\r\\nSymbols Suitable for\\r\\ndryer\\r\\nNo Iron Sensitive \\/\\r\\nDelicate dry\\r\\nDo not dry\\r\\nwith dryer\\r\\nDo not dry Do not dryclean\\r\\nDRYING\\r\\nDrying\\r\\nSettings\\r\\nAt any temperature\\r\\nAt high temperature\\r\\nAt medium\\r\\ntemperature\\r\\nAt low temperature\\r\\nWithout heating\\r\\nHang to dry\\r\\nLay to dry\\r\\nHang wet to dry\\r\\nLay in shadow\\r\\nto dry\\r\\nDry-cleanable\\r\\nIron -\\r\\nIRON Dry or Steam\\r\\nIron at high\\r\\ntemperature\\r\\nIron at medium\\r\\ntemperature\\r\\nIron at low\\r\\ntemperature\\r\\nMaximum temperature 200 0\\r\\nC 150 0\\r\\nC 110 0\\r\\nC\\r\\nDo not iron\\r\\nIron without\\r\\nsteam\\r\\nAll bleaches are allowed\\r\\nBleach (sodium\\r\\nhypochlorite)\\r\\ncan be used\\r\\nBleach is not\\r\\nallowed\\r\\nOnly bleaches without\\r\\nchlorine are allowed\\r\\nBLEACH\\r\\n16 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\nPreparation\\r\\n4.2 Preparing laundry for washing\\r\\n\\u2022 Laundry items with metal attachments such as,\\r\\nunderwired bras, belt buckles or metal buttons\\r\\nwill damage the machine. Remove the metal\\r\\npieces or wash the clothes by putting them in a\\r\\nlaundry bag or pillow case.\\r\\n\\u2022 Take out all substances in the pockets such as\\r\\ncoins, pens and paper clips, and turn pockets\\r\\ninside out and brush. Such objects may damage\\r\\nthe product or cause noise problem.\\r\\n\\u2022 Put small size clothes such as infant's socks\\r\\nand nylon stockings in a laundry bag or pillow\\r\\ncase.\\r\\n\\u2022 Place curtains in without compressing them.\\r\\nRemove curtain attachment items.\\r\\n\\u2022 Fasten zippers, sew loose buttons and mend\\r\\nrips and tears.\\r\\n\\u2022 Wash \\u201Cmachine washable\\u201D or \\u201Chand washable\\u201D\\r\\nlabelled products only with an appropriate\\r\\nprogramme.\\r\\n\\u2022 Do not wash colours and whites together. New,\\r\\ndark coloured cottons release a lot of dye. Wash\\r\\nthem separately.\\r\\n\\u2022 Tough stains must be treated properly before\\r\\nwashing. If unsure, check with a dry cleaner.\\r\\n\\u2022 Use only dyes\\/colour changers and limescale\\r\\nremovers suitable for machine wash. Always\\r\\nfollow the instructions on the package.\\r\\n\\u2022 Wash trousers and delicate laundry turned\\r\\ninside out.\\r\\n\\u2022 Keep laundry items made of Angora wool in the\\r\\nfreezer for a few hours before washing. This will\\r\\nreduce pilling.\\r\\n\\u2022 Laundry that are subjected to materials such as\\r\\nflour, lime dust, milk powder, etc. intensely must\\r\\nbe shaken off before placing into the machine.\\r\\nSuch dusts and powders on the laundry may\\r\\nbuild up on the inner parts of the machine in\\r\\ntime and can cause damage.\\r\\n4.3 Things to be done\\r\\nfor energy saving\\r\\nFollowing information will help you use the\\r\\nproduct in an ecological and energy-efficient\\r\\nmanner.\\r\\n\\u2022 Operate the product in the highest capacity\\r\\nallowed by the programme you have selected,\\r\\nbut do not overload. See, \\u201CProgramme and\\r\\nconsumption table\\u201D.\\r\\n\\u2022 Always follow the instructions on the detergent\\r\\npackaging.\\r\\n\\u2022 Wash slightly soiled laundry at low\\r\\ntemperatures.\\r\\n\\u2022 Use faster programmes for small quantities of\\r\\nlightly soiled laundry.\\r\\n\\u2022 Do not use prewash and high temperatures for\\r\\nlaundry that is not heavily soiled or stained.\\r\\n\\u2022 If you plan to dry your laundry in a dryer, select\\r\\nthe highest spin speed recommended during\\r\\nwashing process.\\r\\n\\u2022 Do not use detergent in excess of the amount\\r\\nrecommended on the detergent package.\\r\\nWashing Machine \\/User\\u2019s Manual 17 \\/ EN\\r\\nPreparation\\r\\n4.4 First use\\r\\nBefore starting to use the product, make sure that\\r\\nall preparations are completed in accordance with\\r\\nthe instructions in sections \\\"Important safety and\\r\\nenvironment instructions\\\" and \\\"Installation\\\".\\r\\nTo prepare the product for washing laundry,\\r\\nperform first operation in Drum Cleaning\\r\\nprogramme. If your machine is not featured with\\r\\nthis program, apply the method described in 6.2.\\r\\nC Use an anti-limescale suitable for the\\r\\nwashing machines.\\r\\nC Some water might have remained in\\r\\nthe product due to the quality control\\r\\nprocesses in the production. It is not\\r\\nharmful for the product.\\r\\n4.5 Correct load capacity\\r\\nThe maximum load capacity depends on the type\\r\\nof laundry, the degree of soiling and the washing\\r\\nprogramme desired.\\r\\nThe machine automatically adjusts the amount\\r\\nof water according to the weight of the loaded\\r\\nlaundry.\\r\\nA WARNING: Follow the information in the\\r\\n\\u201CProgramme and consumption table\\u201D.\\r\\nWhen overloaded, machine's washing\\r\\nperformance will drop. Moreover, noise\\r\\nand vibration problems may occur.\\r\\nLaundry type Weight (g)\\r\\nBathrobe 1200\\r\\nNapkin 100\\r\\nDuvet cover 700\\r\\nBed Sheet 500\\r\\nPillowcase 200\\r\\nTablecloth 250\\r\\nTowel 200\\r\\nHand towel 100\\r\\nEvening gown 200\\r\\nUnderclothing 100\\r\\nMen\\u2019s overalls 600\\r\\nMen\\u2019s shirt 200\\r\\nMen\\u2019s pajamas 500\\r\\nBlouses 100\\r\\n4.6 Loading the laundry\\r\\n1 Open the loading door.\\r\\n2 Place laundry items loosely into the machine.\\r\\n3 Push the loading door to close until you hear a\\r\\nlocking sound. Ensure that no items are caught\\r\\nin the door.\\r\\nCThe loading door is locked while a\\r\\nprogramme is running. The door can only\\r\\nbe opened a while after the programme\\r\\ncomes to an end.\\r\\nAWARNING: In case of misplacing the\\r\\nlaundry, noise and vibration problems may\\r\\noccur in the machine.\\r\\n18 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\nPreparation\\r\\n4.7 Using detergent and softener\\r\\nC When using detergent, softener, starch,\\r\\nfabric dye, bleach or limescale remover,\\r\\nread the manufacturer's instructions\\r\\non the package carefully and follow the\\r\\nsuggested dosage values. Use measuring\\r\\ncup if available.\\r\\nDetergent Drawer\\r\\nThe detergent drawer is composed of three\\r\\ncompartments:\\r\\n\\u2013 (1) for prewash\\r\\n\\u2013 (2) for main wash\\r\\n\\u2013 (3) for softener\\r\\n\\u2013 (*) in addition, there is siphon piece in the\\r\\nsoftener compartment.\\r\\n2 3 1\\r\\nDetergent, softener and other cleaning agents\\r\\n\\u2022 Add detergent and softener before starting the\\r\\nwashing programme.\\r\\n\\u2022 Never leave the detergent drawer open while\\r\\nthe washing programme is running!\\r\\n\\u2022 When using a programme without prewash,\\r\\ndo not put any detergent into the prewash\\r\\ncompartment (compartment nr. \\\"1\\\").\\r\\n\\u2022 In a programme with prewash, do not put\\r\\nliquid detergent into the prewash compartment\\r\\n(compartment nr. \\\"1\\\").\\r\\n\\u2022 Do not select a programme with prewash if you\\r\\nare using a detergent bag or dispensing ball.\\r\\nPlace the detergent bag or the dispensing ball\\r\\ndirectly among the laundry in the machine.\\r\\n\\u2022 If you are using liquid detergent, do not forget\\r\\nto place the liquid detergent cup into the main\\r\\nwash compartment (compartment nr. \\\"2\\\").\\r\\nChoosing the detergent type\\r\\nThe type of detergent to be used depends on the\\r\\ntype and colour of the fabric.\\r\\n\\u2022 Use different detergents for coloured and white\\r\\nlaundry.\\r\\n\\u2022 Wash your delicate clothes only with special\\r\\ndetergents (liquid detergent, wool shampoo,\\r\\netc.) used solely for delicate clothes.\\r\\n\\u2022 When washing dark coloured clothes and quilts,\\r\\nit is recommended to use liquid detergent.\\r\\n\\u2022 Wash woollens with special detergent made\\r\\nspecifically for woollens.\\r\\nA WARNING: Use only detergents\\r\\nmanufactured specifically for washing\\r\\nmachines.\\r\\nA WARNING: Do not use soap powder.\\r\\nAdjusting detergent amount\\r\\nThe amount of washing detergent to be used\\r\\ndepends on the amount of laundry, the degree of\\r\\nsoiling and water hardness.\\r\\n\\u2022 Do not use amounts exceeding the dosage\\r\\nquantities recommended on the detergent\\r\\npackage to avoid problems of excessive foam,\\r\\npoor rinsing, financial savings and finally,\\r\\nenvironmental protection.\\r\\n\\u2022 Use lesser detergent for small amounts or\\r\\nlightly soiled clothes.\\r\\nUsing softeners\\r\\nPour the softener into the softener compartment\\r\\nof the detergent drawer.\\r\\n\\u2022 Do not exceed the (>max<) level marking in the\\r\\nsoftener compartment.\\r\\n\\u2022 If the softener has lost its fluidity, dilute it with\\r\\nwater before putting it in the detergent drawer.\\r\\nUsing liquid detergents\\r\\nWashing Machine \\/User\\u2019s Manual 19 \\/ EN\\r\\nPreparation\\r\\nIf the product contains a liquid detergent cup:\\r\\n\\u2022 Place the liquid detergent cup in compartment\\r\\nnr. \\\"2\\\".\\r\\n\\u2022 If the liquid detergent has lost its fluidity, dilute\\r\\nit with water before putting in the detergent\\r\\ncup.\\r\\nIf the product does not contain a liquid\\r\\ndetergent cup:\\r\\n\\u2022 Do not use liquid detergent for the prewash in a\\r\\nprogramme with prewash.\\r\\n\\u2022 Liquid detergent stains your clothes when used\\r\\nwith Delayed Start function. If you are going to\\r\\nuse the Delayed Start function, do not use liquid\\r\\ndetergent.\\r\\nUsing gel and tablet detergent\\r\\n\\u2022 If the gel detergent thickness is fluidal and\\r\\nyour machine does not contain a special liquid\\r\\ndetergent cup, put the gel detergent into the\\r\\nmain wash detergent compartment during first\\r\\nwater intake. If your machine contains a liquid\\r\\ndetergent cup, fill the detergent into this cup\\r\\nbefore starting the programme.\\r\\n\\u2022 If the gel detergent thickness is not fluidal or in\\r\\nthe shape of capsule liquid tablet, put it directly\\r\\ninto the drum before washing.\\r\\n\\u2022 Put tablet detergents into the main wash\\r\\ncompartment (compartment nr. \\\"2\\\") or directly\\r\\ninto the drum before washing.\\r\\nC Tablet detergents may leave residues\\r\\nin the detergent compartment. If you\\r\\nencounter such a case, place the tablet\\r\\ndetergent between the laundry, close\\r\\nto the lower part of the drum in future\\r\\nwashings.\\r\\nC Use the tablet or gel detergent without\\r\\nselecting the prewash function.\\r\\nUsing starch\\r\\n\\u2022 Add liquid starch, powder starch or the fabric\\r\\ndye into the softener compartment.\\r\\n\\u2022 Do not use softener and starch together in a\\r\\nwashing cycle.\\r\\n\\u2022 Wipe the inside of the machine with a damp\\r\\nand clean cloth after using starch.\\r\\nUsing bleaches\\r\\n\\u2022 Select a programme with prewash and add\\r\\nthe bleaching agent at the beginning of the\\r\\nprewash. Do not put detergent in the prewash\\r\\ncompartment. As an alternative application,\\r\\nselect a programme with extra rinse and add\\r\\nthe bleaching agent while the machine is taking\\r\\nwater from the detergent compartment during\\r\\nfirst rinsing step.\\r\\n\\u2022 Do not use bleaching agent and detergent by\\r\\nmixing them.\\r\\n\\u2022 Use just a little amount (approx. 50 ml) of\\r\\nbleaching agent and rinse the clothes very\\r\\nwell as it causes skin irritation. Do not pour the\\r\\nbleaching agent onto the clothes and do not\\r\\nuse it for coloured clothes.\\r\\n\\u2022 When using oxygen based bleaches, select\\r\\na programme that washes at a lower\\r\\ntemperature.\\r\\n\\u2022 Oxygen based bleaches can be used together\\r\\nwith detergents; however, if its thickness\\r\\nis not the same with the detergent, put the\\r\\ndetergent first into the compartment nr. \\\"2\\\"\\r\\nin the detergent drawer and wait until the\\r\\ndetergent flows while the machine is taking in\\r\\nwater. Add the bleaching agent from the same\\r\\ncompartment while the machine is still taking in\\r\\nwater.\\r\\nUsing limescale remover\\r\\n\\u2022 When required, use limescale removers\\r\\nmanufactured specifically for washing machines\\r\\nonly. \\r\\n20 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\n5 Operating the product\\r\\n1 2 3 4 5\\r\\n6\\r\\n7\\r\\n10 9 8\\r\\n5.1 Control panel\\r\\n1. Programme selection knob\\r\\n2 - Spin Speed Adjustment button\\r\\n3 - Temperature adjustment button\\r\\n4 - Display\\r\\n5 - Programme follow-up indicator\\r\\n6 - On \\/ Off button\\r\\n7 - Start \\/ Pause button\\r\\n8 - End Time Adjustment button\\r\\n9 - Auxiliary Function buttons\\r\\n10 - Programme Selection lights\\r\\nC The visuals used for machine description in this section are schematic and may not match exactly will\\r\\nthe features of your machine.\\r\\nWashing Machine \\/User\\u2019s Manual 21 \\/ EN\\r\\nOperating the product\\r\\n5.2 Display symbols\\r\\n1888 88:88\\r\\n88 C\\r\\n0\\r\\na b c d e f g\\r\\nh\\r\\nm l k j i\\r\\na - Temperature indicator\\r\\nb - Electrical connection\\r\\nc - Steam indicator\\r\\nd - Audio Warning indicator\\r\\ne - No Water indicator\\r\\nf - Detergent indicator\\r\\ng - Start \\/ Pause indicator\\r\\nh - Program Follow-up indicator\\r\\ni - End Time indicator\\r\\nj - Duration Information Line\\r\\nk - Auxiliary Function indicators\\r\\nl - Lock indicator\\r\\nm - Spin Speed indicator\\r\\n22 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\nOperating the product\\r\\n5.3 Preparing the machine\\r\\n1 Check if the hoses are connected tightly.\\r\\n2 Plug in your machine.\\r\\n3 Turn the tap on completely.\\r\\n4 Place the laundry in the machine.\\r\\n5 Add detergent and fabric softener.\\r\\n5.4 Programme selection\\r\\n1 Determine the programme suitable for the\\r\\ntype, quantity and soiling level of the laundry\\r\\nin accordance with the \\\"Programme and\\r\\nconsumption table\\\" and the temperature table\\r\\nbelow.\\r\\n90\\u02DAC\\r\\nHeavily soiled white cottons and linens.\\r\\n(coffee table covers, tableclothes, towels,\\r\\nbed sheets, etc.)\\r\\n60\\u02DAC\\r\\nNormally soiled, coloured, fade proof\\r\\nlinens, cottons or synthetic clothes (shirt,\\r\\nnightgown, pajamas, etc.) and lightly soiled\\r\\nwhite linens (underwear, etc.)\\r\\n40\\u02DAC30\\u02DACCold\\r\\nBlended laundry including delicate textile\\r\\n(veil curtains, etc.), synthetics and woolens.\\r\\n2 Select the desired programme with the\\r\\n\\u201CProgramme Selection\\u201D knob.\\r\\n1888 88:88\\r\\n88 C\\r\\n0\\r\\nC Programmes are limited with the highest\\r\\nspin speed appropriate for that particular\\r\\ntype of fabric.\\r\\nC When selecting a programme, always\\r\\nconsider the type of fabric, colour,\\r\\ndegree of soiling and permissible water\\r\\ntemperature.\\r\\nC Always select the lowest required\\r\\ntemperature. Higher temperature means\\r\\nhigher power consumption.\\r\\n5.5 Programmes\\r\\nDepending on the type of fabric, use the following\\r\\nmain programmes.\\r\\n \\u2022 Cottons\\r\\nUse this programme for your durable whites and\\r\\ncolourfast cotton clothes. This programme is\\r\\nsuggested for washing heavily soiled items.\\r\\n \\u2022 Synthetics\\r\\nUse to wash your synthetic clothes (shirts,\\r\\nblouses, synthetic\\/cotton blends, etc.). It washes\\r\\nwith a gentle action and has a shorter washing\\r\\ncycle compared to the Cottons programme.\\r\\nFor curtains and tulle, use the Synthetic 40\\u02DAC\\r\\nprogramme with prewash and anti-creasing\\r\\nfunctions selected. As their meshed texture\\r\\ncauses excessive foaming, wash the veils\\/tulle by\\r\\nputting little amount of detergent into the main\\r\\nwash compartment. Do not put detergent in the\\r\\nprewash compartment.\\r\\n \\u2022 Wool\\r\\nUse to wash your woolen clothes. Select the\\r\\nappropriate temperature complying with the tags\\r\\nof your clothes. Use appropriate detergents for\\r\\nwoolens.\\r\\n\\u201CThe wool wash cycle of this machine has\\r\\nbeen approved by The Woolmark Company\\r\\nfor the washing of machine washable wool\\r\\nproducts provided that the products are\\r\\nwashed according to the instructions on\\r\\nthe garment label and those issued by the\\r\\nmanufacturer of this washing machine.\\r\\nM0000.\\u201D\\r\\n\\u201CIn UK, Eire, Hong Kong and India the\\r\\nWoolmark trade mark is a Certification\\r\\ntrade mark.\\u201D\\r\\nWashing Machine \\/User\\u2019s Manual 23 \\/ EN\\r\\nOperating the product\\r\\n\\u2022 Auto Program\\r\\nUse to wash your frequently washable cotton, synthetic or blended (cotton+synthetic) clothes.\\r\\nProgramme detects the type and quantity of the laundry to automatically adjust water consumption and\\r\\nprogramme time.\\r\\nA CAUTION: Do not wash your woolen and delicate clothes in this programme.\\r\\nSelect a suitable temperature if the temperature shown on the temperature display is not compatible\\r\\nwith the warnings on the garment label.\\r\\nThe maximum washing temperature in Automatic programme depending on the soiling level and\\r\\nlaundry type is 60\\u00BAC. Washing performance may not be at the desired level for heavily soiled whites\\r\\nand stubborn stains (collar, sock soil, perspiration stain, etc.). In this case, it is recommended to select\\r\\nCottons programme with prewash and set the temperature to 50-60\\u00B0C.\\r\\nMany types of clothing are correctly detected and safely washed in Automatic programme.\\r\\nSuitable clothes and the appropriate Automatic programme settings for washing them are shown in the\\r\\ntable below.\\r\\nType of laundry Laundry content\\r\\nSelectable\\r\\ntemperature\\r\\nlevels\\r\\nMax.\\r\\nlaundry\\r\\namount\\r\\nHome textiles (duvet cover, bed sheet, pillowcase,\\r\\ncoverlet, towel, bathrobe, table cloth, hand cloth,\\r\\nnapkin, couch cover, beach towel, etc.).\\r\\nCotton, lycra Cold - 60 \\u02DAC Full capacity\\r\\nUnderwear (undershirts, panties\\/slips, boxers,\\r\\netc.), socks, pajamas Cotton, lycra Cold - 60 \\u02DAC Full capacity\\r\\nShirts Cotton, polyester, linen Cold - 60 \\u02DAC 1\\/2 capacity\\r\\nKnitted garments* (T-shirt, body, dress, lingerie,\\r\\ntights)\\r\\nCotton, polyamide (nylon),\\r\\npolyester, lycra Cold - 40 \\u02DAC 1\\/2 capacity\\r\\nSportswear (Sweatshirt, track suit, shorts, etc.) Cotton, polyamide (nylon),\\r\\npolyester, microfiber, lycra Cold - 40 \\u02DAC 1\\/2 capacity\\r\\nJeans (trousers, jackets, vests, etc.) Cotton, lycra Cold - 40 \\u02DAC 1\\/2 capacity\\r\\nCorduroy and canvas clothes (trousers, shirts,\\r\\netc.) Cotton, lycra Cold - 40 \\u02DAC 1\\/2 capacity\\r\\nDark coloured clothes Cotton, polyester,\\r\\npolyamide (nylon) Cold - 40 \\u02DAC 1\\/2 capacity\\r\\n* Knitted clothes can easily shrink or stretch, crooked or pilled due to their elastic fabrics. Deformations on knitted\\r\\nfabrics are related with the quality of the cloth, and do not arise from washing programmes (Automatic or other\\r\\nwashing programmes). Use \\\"Sportswear\\\" washing programme for knitted clothes.\\r\\n24 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\nOperating the product\\r\\nFollowing table includes cloth types to be washed gently and some washing programmes suitable for\\r\\nsome special clothes.\\r\\nSpecial laundry type Laundry content Recommended washing\\r\\nprogramme\\r\\nBlouse, dress, skirt, foulard Viscose, modal, rayon, tencel,\\r\\nlyocell, angora Hand Wash\\r\\nKnitted, dress Wool, acrylic Woolens\\r\\nPullover, cardigan, vest, scarf, beret, socks,\\r\\netc. Wool, acrylic, cashmere Woolens\\r\\nBlouse, dress, scarf, foulard Silk, cashmere Lingerie\\r\\nSatin lingerie, lace clothing, bra Silk, polyester, polyamide Lingerie\\r\\nFabric trousers, skirt, dress Polyester Hand Wash\\r\\nFeatured sportswear (water and windproof\\r\\nclothes) Polyester, polyamide Sportswear\\r\\nTulle curtain Polyester, polyamide Curtain\\r\\nFiber duvet Fiber Bedding\\r\\nHeavily soiled clothes (aprons, children's\\r\\nwear) Cotton, polyester Hygiene + Prewash (with high\\r\\ntemperature selection)\\r\\nBaby dresses Cottons Hygiene\\r\\nWashing Machine \\/User\\u2019s Manual 25 \\/ EN\\r\\nOperating the product\\r\\n\\u2022 Cottons Eco\\r\\nUse to wash your normally soiled, durable cotton\\r\\nand linen laundry. Although it washes longer than\\r\\nall other programmes, it provides high energy\\r\\nand water savings. Actual water temperature may\\r\\nbe different from the stated wash temperature.\\r\\nWhen you load the machine with less laundry\\r\\n(e.g. \\u00BD capacity or less), programme time may\\r\\nautomatically get shorter. In this case, energy and\\r\\nwater consumption will decrease more, providing\\r\\na more economic wash. This programme is\\r\\navailable in the models with the remaining time\\r\\nindicator.\\r\\n\\u2022 Anti-Allergy +\\r\\nUse to wash baby laundry, and the laundry that\\r\\nbelongs to allergic persons. Longer heating time\\r\\nand an additional rinsing step provide a higher\\r\\nlevel of hygiene.\\r\\n\\u2022 Anti-Allergy + 60\\u00B0C programme is tested and\\r\\napproved by \\u201CThe British Allergy Foundation\\u201D\\r\\n(Allergy UK) in United Kingdom.\\r\\n\\u2022 Delicates\\r\\nUse to wash your delicate clothes. It washes with\\r\\nmore gentle washing action compared to the\\r\\nSynthetics programme.\\r\\n\\u2022 Hand Wash\\r\\nUse to wash your woolen\\/delicate clothes that\\r\\nbear \\u201Cnot machine-washable\\u201D tags and for which\\r\\nhand wash is recommended. It washes laundry\\r\\nwith a very gentle washing action to not to\\r\\ndamage clothes.\\r\\n\\u2022 Daily\\/Quick\\r\\nUse to wash your lightly soiled and unstained\\r\\ncotton laundry in a short time.\\r\\n\\u2022 Quick 14\\r\\nUse to wash your lightly soiled and unstained\\r\\ncotton laundry in a short time.\\r\\n\\u2022 Steam Therapy\\r\\nTo soften the soiling, it pre-treats the laundry by\\r\\ngiving steam.\\r\\nC Load only half of the capacity stated for\\r\\nthe selected programme.\\r\\nWhen this programme is selected, it is\\r\\nnormal to hear boiling noises since the\\r\\nsteam generator boils water to produce\\r\\nsteam.\\r\\n\\u2022 Shirts\\r\\nUse to wash the shirts made of cotton, synthetic\\r\\nand synthetic blended fabrics together.\\r\\n\\u2022 Sports+Outdoor\\r\\nUse this programme to wash your garments that\\r\\nare worn for a short time such as sportswear. It is\\r\\nsuitable to wash little amount of cotton \\/ synthetic\\r\\nblended garments.\\r\\n\\u2022 Bedding+Blanket\\r\\nUse this programme to wash your fiber duvets\\r\\nthat bear \\\"machine washable\\\" tag. Make sure that\\r\\nyou have loaded the duvet correctly in order not\\r\\nto damage the machine and the duvet. Remove\\r\\nthe duvet cover before loading the duvet into the\\r\\nmachine. Fold the duvet into two and load it into\\r\\nthe machine. Load the duvet into the machine\\r\\npaying attention to place it in a way that it will not\\r\\ncontact the bellow.\\r\\nC Do not load more than 1 double fibre duvet\\r\\n(200 x 200 cm).\\r\\nC Do not wash your duvets, pillows and etc.\\r\\nthat contain cotton in the machine.\\r\\nACAUTION: Do not wash the items apart\\r\\nfrom duvets such as carpets, rugs and etc.\\r\\nin the machine. Permanent damage occurs\\r\\nin the machine.\\r\\n26 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\nOperating the product\\r\\n \\u2022 Rinse\\r\\nUse when you want to rinse or starch separately.\\r\\n\\u2022 Spin+Drain\\r\\nUse to drain the water in the machine.\\r\\n5.8 Temperature selection\\r\\nWhenever a new programme is selected, the\\r\\nrecommended temperature for the programme\\r\\nappears on the temperature indicator. It is possible\\r\\nthat the recommended temperature value is not\\r\\nthe maximum temperature that can be selected\\r\\nfor the current programme.\\r\\n1888 88:88\\r\\n88 C\\r\\n0\\r\\nPress the Temperature Adjustment button\\r\\nto change the temperature. Temperature will\\r\\ndecrease by steps of 10 \\u00B0C.\\r\\nC Temperature Adjustment button only\\r\\nserves for decreasing the temperature.\\r\\nFinally, \\u201C-\\u201D symbol indicating the cold wash option\\r\\nappears on the display.\\r\\n1888 88:88 -\\r\\nC\\r\\n0\\r\\nC No change can be made in programmes\\r\\nwhere temperature adjustment is not\\r\\nallowed.\\r\\nYou can also change the temperature after the\\r\\nwashing starts. This change can be made if the\\r\\nwashing steps allow it. Changes cannot be made\\r\\nif the steps do not allow it.\\r\\nC If you scroll to cold wash option and press\\r\\nTemperature Adjustment button again, the\\r\\nrecommended maximum temperature for\\r\\nthe selected programme appears on the\\r\\ndisplay. Press the Temperature Adjustment\\r\\nbutton again to decrease the temperature.\\r\\n5.9 Spin speed selection\\r\\nWhenever a new programme is selected, the\\r\\nrecommended spin speed of the selected\\r\\nprogramme is displayed on the Spin Speed\\r\\nindicator.\\r\\nC It is possible that the recommended spin\\r\\nspeed value is not the maximum spin\\r\\nspeed that can be selected for the current\\r\\nprogramme.\\r\\n1888 88:88\\r\\n88 C\\r\\n0\\r\\nPress the Spin Speed Adjustment button to\\r\\nchange the spin speed. Spin speed decreases\\r\\ngradually.\\r\\nThen, depending on the model of the product,\\r\\n\\\"Rinse Hold\\\" and \\\"No Spin\\\" options appear on the\\r\\ndisplay.\\r\\nC Spin Speed Adjustment button only\\r\\nserves for decreasing the spin speed.\\r\\nC Rinse Hold option is indicated with \\u201C\\u0131_\\u0131\\u201D\\r\\nsymbol and No Spin option is indicated\\r\\nwith \\u201C_\\u201D symbol.\\r\\nIf you are not going to unload your laundry\\r\\nimmediately after the programme completes, you\\r\\ncan use Rinse Hold function in order to prevent\\r\\nthem from getting wrinkled when there is no water \\r\\nWashing Machine \\/User\\u2019s Manual 27 \\/ EN\\r\\nOperating the product\\r\\nin the machine.\\r\\nThis function holds the laundry in the final rinsing\\r\\nwater.\\r\\n88:88\\r\\n88 C\\r\\n0\\r\\nIf you want to spin your laundry after the Rinse\\r\\nHold function:\\r\\n- Adjust the Spin Speed.\\r\\n- Press Start \\/ Pause \\/ Cancel button. The\\r\\nprogramme resumes. Machine discharges the\\r\\nwater and spins the laundry.\\r\\nIf you want to discharge the water at the end of\\r\\nthe programme without spinning, use No Spin\\r\\nfunction.\\r\\n88:88\\r\\n88 C\\r\\n0\\r\\nC No change can be made in programmes\\r\\nwhere spin speed adjustment is not\\r\\nallowed.\\r\\nYou can change the spin speed after the washing\\r\\nstarts if the washing steps allow it. Changes\\r\\ncannot be made if the steps do not allow it. \\r\\n28 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\nOperating the product\\r\\n5.10 Programme and consumption table\\r\\n\\u2022 : Selectable.\\r\\n* : Automatically selected, no canceling.\\r\\n** : Energy Label programme (AS\\/NZS 2040)\\r\\n*** : If maximum spin speed of the machine is lower then this value, you can only select up to the maximum spin speed.\\r\\n**** : Programme detects the type and quantity of the laundry to automatically adjust water and energy consumption and\\r\\nprogramme time.\\r\\n- : See the programme description for maximum load.\\r\\nC The auxiliary functions in the table may vary according to the model of your machine.\\r\\nWater and power consumption may vary subject to the changes in water pressure, water\\r\\nhardness and temperature, ambient temperature, type and amount of laundry, selection of\\r\\nauxiliary functions and spin speed, and changes in electric voltage.\\r\\nYou can see the washing time of the programme you have selected on the display of the\\r\\nmachine. It is normal that small differences may occur between the time shown on the display\\r\\nand the real washing time.\\r\\n\\u201CSelection patterns for auxiliary functions can be changed by the manufacturer company. New\\r\\nselection patterns can be added or removed.\\u201D\\r\\n\\u201CThe spin speed of your machine may vary according to the programme; this spin speed cannot\\r\\nexceed the max. spin speed of your machine.\\u201D\\r\\nEN 2 Auxiliary functions\\r\\nProgramme\\r\\nMax. Load (kg)\\r\\nWater Consumption (l)\\r\\nEnergy Consumption (kWh)\\r\\nMax. Speed***\\r\\nPrewash\\r\\nQuick\\r\\nExtra Rinse\\r\\nSelectable\\r\\ntemperature range\\r\\n\\u00B0C\\r\\nCottons 90 9 78 2.60 1400 \\u2022 \\u2022 \\u2022 90-Cold\\r\\nCottons 60 9 78 1.78 1400 \\u2022 \\u2022 \\u2022 90-Cold\\r\\nCottons 40 9 78 0.97 1400 \\u2022 \\u2022 \\u2022 90-Cold\\r\\nCottons Eco 40** 9 78 0.86 1400 40-Cold\\r\\nBedding&Blanket 40 - 70 0.75 1200 \\u2022 60-40\\r\\nAnti-Allergy + 90 9 100 2.70 1400 \\u2022 * 90-30\\r\\nAuto Program 40 9 **** **** 1400 \\u2022 \\u2022 \\u2022 Cold-60\\r\\nQuick 14 30 2 42 0.15 1400 \\u2022 30-Cold\\r\\nDaily\\/Quick 90 9 65 2.20 1400 \\u2022 90-Cold\\r\\nDaily\\/Quick 60 9 65 1.06 1400 \\u2022 90-Cold\\r\\nDaily\\/Quick 30 9 65 0.28 1400 \\u2022 90-Cold\\r\\nSynthetics 60 4 56 0.90 1000 \\u2022 \\u2022 \\u2022 60-Cold\\r\\nSynthetics 40 4 56 0.50 1000 \\u2022 \\u2022 \\u2022 60-Cold\\r\\nSports&Outdoor 40 4 60 0.60 1000 \\u2022 \\u2022 \\u2022 40-Cold\\r\\nShirts 60 4 65 1.15 800 \\u2022 \\u2022 \\u2022 60-Cold\\r\\nDelicates 40 3 54 0.44 1000 \\u2022 40-Cold\\r\\nWool 40 2 45 0.31 1000 40-Cold\\r\\nHand Wash 30 1.5 35 0.20 600 \\u2022 40-Cold\\r\\nSteam Therapy - 1 1 0.17 - -\\r\\nWashing Machine \\/User\\u2019s Manual 29 \\/ EN\\r\\nOperating the product\\r\\n5.11 Auxiliary function selection\\r\\nSelect the desired auxiliary functions before\\r\\nstarting the programme. Whenever a programme\\r\\nis selected, frames of the auxiliary function symbol\\r\\nthat can be selected together with it illuminates.\\r\\nAnd when you select an auxiliary function, the\\r\\ninterior area of the auxiliary function symbol also\\r\\nstarts to illuminate.\\r\\n1888 88:88\\r\\n88 C\\r\\n0\\r\\nC Frame of the auxiliary function symbol\\r\\nthat cannot be selected with the current\\r\\nprogramme does not illuminate.\\r\\nAlso the frames of the auxiliary function suitable\\r\\nfor the current programme after the washing has\\r\\nstarted remains illuminated. You can select or\\r\\ncancel the auxiliary functions whose frames are\\r\\nilluminated. If the wash cycle has reached a point\\r\\nwhere you cannot select the auxiliary function, the\\r\\nfunction's frame turns off.\\r\\nC Some functions cannot be selected\\r\\ntogether. If a second auxiliary function\\r\\nconflicting with the first one is selected\\r\\nbefore starting the machine, the function\\r\\nselected first will be canceled and the\\r\\nsecond auxiliary function selection will\\r\\nremain active. For example, if you want to\\r\\nselect Quick Wash after you have selected\\r\\nthe Additional Water, Additional Water will\\r\\nbe canceled and Quick Wash will remain\\r\\nactive.\\r\\nC An auxiliary function that is not compatible\\r\\nwith the programme cannot be selected.\\r\\n(See, \\u201CProgramme and consumption table\\\")\\r\\nC Some programmes have auxiliary functions\\r\\nthat must be operated simultaneously.\\r\\nThose functions cannot be cancelled.\\r\\nThe frame of the auxiliary function will\\r\\nnot be illuminated, only inner area will be\\r\\nilluminated.\\r\\n \\u2022 Prewash\\r\\nA Prewash is only worthwhile for heavily soiled\\r\\nlaundry. Not using the Prewash will save energy,\\r\\nwater, detergent and time.\\r\\n \\u2022 Quick\\r\\nThis function can be used in Cottons and\\r\\nSynthetics programmes. It decreases the washing\\r\\ntimes and also the number of rinsing steps for\\r\\nlightly soiled laundry.\\r\\nC When you select this function, load your\\r\\nmachine with half of the maximum laundry\\r\\nspecified in the programme table.\\r\\n \\u2022 Extra Rinse\\r\\nThis function enables the machine to make\\r\\nanother rinsing in addition to the one already\\r\\nmade after the main wash. Thus, the risk for\\r\\nsensitive skins (babies, allergic skins, etc.) to be\\r\\neffected by the minimal detergent remnants on\\r\\nthe laundry can be reduced.\\r\\n \\u2022 Rinse Hold\\r\\nIf you are not going to unload your clothes\\r\\nimmediately after the programme completes, you\\r\\ncan use rinse hold function to keep your laundry\\r\\nin the final rinsing water in order to prevent them\\r\\nfrom getting wrinkled when there is no water in\\r\\nthe machine. Press Start \\/ Pause button after this\\r\\nprocess if you want to drain the water without\\r\\nspinning your laundry. Programme will resume\\r\\nand complete after draining the water.\\r\\nIf you want to spin the laundry held in water,\\r\\nadjust the Spin Speed and press Start \\/ Pause\\r\\nbutton.\\r\\nThe programme resumes. Water is drained,\\r\\nlaundry is spun and the programme is completed.\\r\\n30 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\nOperating the product\\r\\n Time display\\r\\nRemaining time for the completion of the\\r\\nprogramme while it is running is displayed as\\r\\n\\u201C01:30\\u201D in hours and minutes format.\\r\\nC Programme time may differ from\\r\\nthe values in the \\\"Programme and\\r\\nconsumption table\\\" depending on the\\r\\nwater pressure, water hardness and\\r\\ntemperature, ambient temperature,\\r\\namount and the type of laundry, auxiliary\\r\\nfunctions selected and the changes at the\\r\\nmains voltage.\\r\\n5.12 End Time\\r\\nWith the End Time function, the startup of the\\r\\nprogramme may be delayed up to 24 hours.After\\r\\npressing End Time button, the programme's\\r\\nestimated ending time is displayed.If the\\r\\nEnd Time is adjusted, End Time indicator is\\r\\nilluminated.\\r\\n1888 88:88\\r\\n88 C\\r\\n0\\r\\nIn order for the End Time function is activated\\r\\nand the programme is completed at the end of\\r\\nthe specified time, you must press Start \\/ Pause\\r\\nbutton after adjusting the time.\\r\\n1888 88:88\\r\\n88 C\\r\\n0\\r\\nIf you want to cancel End Time function, press On\\r\\n\\/ Off button to turn off and on the machine.\\r\\nC Do not use liquid detergents when you\\r\\nactivate End Time function! There is the\\r\\nrisk of staining of the clothes.\\r\\n1 Open the loading door, place the laundry and\\r\\nput detergent, etc.\\r\\n2 Select the washing programme, temperature,\\r\\nspin speed and, if required, the auxiliary\\r\\nfunctions.\\r\\n3 Set the end time of your choice by pressing\\r\\nthe End Time button. End Time indicator\\r\\nilluminates.\\r\\n4 Press Start \\/ Pause button. Time countdown\\r\\nstarts. \\u201C:\\u201D sign in the middle of the end time on\\r\\nthe display starts flashing.\\r\\nC Additional laundry may be loaded\\r\\nduring the End Time countdown period.\\r\\nAt the end of the countdown, End Time\\r\\nindicator turns off, washing cycle starts\\r\\nand the time of the selected programme\\r\\nappears on the display.\\r\\nC When the End Time selection is\\r\\ncompleted, the time appears on the screen\\r\\nconsists of end time plus the duration of\\r\\nthe selected programme.\\r\\n5.13 Starting the programme\\r\\n1 Press Start \\/ Pause button to start the\\r\\nprogramme.\\r\\n2 The Start \\/ Pause button which was off before\\r\\nstarts to illuminate steadily now, indicating that\\r\\nthe programme has started.\\r\\n1888 88:88\\r\\n88 C\\r\\n0\\r\\n3 Loading door is locked. The door lock symbol\\r\\nappears on the display after the loading door is\\r\\nlocked.\\r\\n1888 88:88\\r\\n88 C\\r\\n0\\r\\n4 Programme follow-up indicator lights on the\\r\\ndisplay will show the current programme step.\\r\\nWashing Machine \\/User\\u2019s Manual 31 \\/ EN\\r\\nOperating the product\\r\\n5.14 Loading door lock\\r\\nThere is a locking system on the loading door of\\r\\nthe machine that prevents opening of the door in\\r\\ncases when the water level is unsuitable.\\r\\n\\\"Door Locked\\\" symbol appears on the display\\r\\nwhen the loading door is locked.\\r\\n5.15 Changing the selections after\\r\\nthe programme has started\\r\\nAdding laundry after the programme has\\r\\nstarted:\\r\\nIf the water level in the machine is suitable when\\r\\nyou press Start \\/ Pause button, loading door\\r\\nsymbol will flash on the display until the loading\\r\\ndoor is opened and will disappear when the\\r\\nloading door is opened.\\r\\n1888 88:88\\r\\n88 C\\r\\n0\\r\\nIf the water level in the machine is not suitable\\r\\nwhen you press Start \\/ Pause button, the loading\\r\\ndoor symbol remain lit on the display.\\r\\n1888 88:88\\r\\n88 C\\r\\n0\\r\\nSwitching the machine to pause mode:\\r\\nPress the Start \\/ Pause button to switch the\\r\\nmachine to pause mode. Pause symbol will flash\\r\\non the display.\\r\\n1888 88:88\\r\\n88 C\\r\\n0\\r\\nChanging the programme selection after\\r\\nprogramme has started:\\r\\nThe programme change is not allowed when the\\r\\ncurrent programme is running.\\r\\nYou can select the new programme after\\r\\nswitching the current programme to standby.\\r\\nC The selected program starts anew.\\r\\nChanging the auxiliary function, speed and\\r\\ntemperature\\r\\nDepending on the step the programme has\\r\\nreached, you can cancel or activate the auxiliary\\r\\nfunctions. See, \\\"Auxiliary function selection\\\".\\r\\nYou can also change the speed and temperature\\r\\nsettings. See, \\\"Spin speed selection\\\" and\\r\\n\\\"Temperature selection\\\"\\r\\nC The loading door will not open if the\\r\\nwater temperature in the machine is\\r\\nhigh or the water level is above the door\\r\\nopening.\\r\\n5.16 Child Lock\\r\\nUse Child Lock function to prevent children from\\r\\ntampering with the machine. Thus you can avoid\\r\\nany changes in a running programme.\\r\\nC You can switch on and off the machine\\r\\nwith On \\/ Off button when the Child\\r\\nLock is active. When you switch on the\\r\\nmachine again, programme will resume\\r\\nfrom where it has stopped.\\r\\nC When the child lock is enabled, an audio\\r\\nwarning will be given if the buttons are\\r\\npressed. Audio warning will be canceled\\r\\nif the buttons are pressed 5 times\\r\\nconsecutively.\\r\\nTo activate the Child Lock:\\r\\nPress and hold Auxiliary Function button 2\\r\\nfor 3 seconds. After the countdown as \\u201CCL 3-2-\\r\\n1\\\" on the display is over, \\\"Child Lock Enabled\\\"\\r\\nappears on the display. You can release Auxiliary\\r\\nFunction button 1 when this warning is\\r\\ndisplayed.\\r\\n32 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\nOperating the product\\r\\nTo deactivate the childproof lock:\\r\\nPress and hold Auxiliary Function button 2\\r\\nfor 3 seconds. After the countdown as \\u201CCL 3-2-\\r\\n1\\u201D on the display is over, \\\"Child Lock Enabled\\\"\\r\\ndisappears from the display.\\r\\n5.17 Canceling the programme\\r\\nThe programme is cancelled when the machine is\\r\\nturned off and on again. Press and hold On \\/ Off\\r\\nbutton for 3 seconds. After the countdown as \\\"3-\\r\\n2-1\\\" on the display is over, the machine turns off.\\r\\nC If you press On \\/ Off button when the\\r\\nChild Lock is enabled, the programme\\r\\nwill not be cancelled. You should cancel\\r\\nthe Child Lock first.\\r\\nC If you want to open the loading door after\\r\\nyou have cancelled the programme but it\\r\\nis not possible to open the loading door\\r\\nsince the water level in the machine is\\r\\nabove the loading door opening, then\\r\\nturn the Programme Selection\\r\\nknob to Pump+Spin programme and\\r\\ndischarge the water in the machine.\\r\\n5.18 End of programme\\r\\nEnd symbol appears on the display when the\\r\\nprogramme is completed.\\r\\nIf you do not press any button for 10 minutes, the\\r\\nmachine will switch to OFF mode. Display and all\\r\\nindicators are turned off.\\r\\nCompleted programme steps will be displayed if\\r\\nyou press On \\/ Off button.\\r\\n5.19 Adjusting the VOLUME level\\r\\nLow volume and high volume\\r\\nPress and hold Auxiliary Function button 3 for\\r\\n3 seconds to adjust the volume level. After the\\r\\ncountdown as \\\"3-2-1\\\" on the display is over,\\r\\nthe volume level symbol will appear and the new\\r\\nvolume level will be displayed.\\r\\n5.20 Memory program setting\\r\\nYou can create a favourite programme by saving\\r\\nfrequently used programme and other settings.\\r\\nUse this function when you want to select quickly\\r\\nthe same settings you use for the laundry that you\\r\\nwash regularly.\\r\\nMemory programme will remain at the factory\\r\\nset programme until you make a new favourite\\r\\nprogramme setting.\\r\\nTo store a new Memory programme:\\r\\n1 Select the desired programme, temperature,\\r\\nspin speed, soiling degree and auxiliary\\r\\nfunction.\\r\\n2 Keep the Memory button pressed for 3\\r\\nseconds.\\r\\n3 Countdown as \\\"3-2-1\\\" appears on the display.\\r\\nTo select a Memory programme:\\r\\n1 Press Memory button. The \\u201CMemory\\u201D selection\\r\\nfield will be activated on the display.\\r\\n2 Programme and other settings saved as Memory\\r\\nappear on the display.\\r\\n3 Press Start \\/ Pause button to start the Memory\\r\\nprogramme.\\r\\nWashing Machine \\/User\\u2019s Manual 33 \\/ EN\\r\\n6 Maintenance and cleaning\\r\\nService life of the product extends and frequently\\r\\nfaced problems decrease if cleaned at regular\\r\\nintervals.\\r\\n6.1 Cleaning the detergent drawer\\r\\nClean the detergent drawer at regular intervals\\r\\n(every 4-5 washing cycles) as shown below\\r\\nin order to prevent accumulation of powder\\r\\ndetergent in time.\\r\\n Lift the rear part of the siphon to remove it as\\r\\nillustrated.\\r\\nC If more than normal amount of water and\\r\\nsoftener mixture starts to gather in the\\r\\nsoftener compartment, clean the siphon.\\r\\n2 Wash the detergent drawer and the siphon with\\r\\nplenty of lukewarm water in a washbasin. Wear\\r\\nprotective gloves or use an appropriate brush\\r\\nto avoid touching of the residues in the drawer\\r\\nwith your skin when cleaning.\\r\\n3 After cleaning, replace the siphon back to its\\r\\nseating and push its front section downwards to\\r\\nmake sure that the locking tab engages.\\r\\n6.2 Cleaning the loading\\r\\ndoor and the drum\\r\\nResidues of softener, detergent and dirt may\\r\\naccumulate in your machine in time and\\r\\nmay cause unpleasant odours and washing\\r\\ncomplaints. To avoid this, use the Drum Cleaning\\r\\nprogramme. If your machine is not featured with\\r\\nDrum Cleaning programme, use Cottons-90\\r\\nprogramme and select Additional Water or\\r\\nExtra Rinse auxiliary functions as well. Run the\\r\\nprogramme without any laundry in the machine.\\r\\nBefore starting the programme, put max. 100\\r\\ng of powder anti-limescale into the main wash\\r\\ndetergent compartment(compartment nr. 2). If\\r\\nthe anti-limescale is in tablet form, put only one\\r\\ntablet into compartment nr. 2. Dry the inside of\\r\\nthe bellow with a clean piece of cloth after the\\r\\nprogramme has come to an end.\\r\\nC Repeat Drum Cleaning process in every\\r\\n2 months.\\r\\nC Use an anti-limescale suitable for the\\r\\nwashing machines.\\r\\nAfter every washing check that no foreign\\r\\nsubstance is left in the drum.\\r\\nIf the holes on the bellow shown in the figure is\\r\\nblocked, open the holes using a toothpick.\\r\\nC Foreign metal substances will cause\\r\\nrust stains in the drum. Clean the stains\\r\\non the drum surface by using cleaning\\r\\nagents for stainless steel. Never use steel\\r\\nwool or wire wool.\\r\\nA WARNING: Never use sponge or scrub\\r\\nmaterials. These will damage the painted\\r\\nand plastic surfaces.\\r\\n34 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\nMaintenance and cleaning\\r\\n6.3 Cleaning the body\\r\\nand control panel\\r\\nWipe the body of the machine with soapy water or\\r\\nnon-corrosive mild gel detergents as necessary,\\r\\nand dry with a soft cloth.\\r\\nUse only a soft and damp cloth to clean the\\r\\ncontrol panel.\\r\\n6.4 Cleaning the water intake filters\\r\\nThere is a filter at the end of each water intake\\r\\nvalve at the rear of the machine and also at the\\r\\nend of each water intake hose where they are\\r\\nconnected to the tap. These filters prevent foreign\\r\\nsubstances and dirt in the water to enter the\\r\\nwashing machine. Filters should be cleaned as\\r\\nthey do get dirty.\\r\\n1 Close the taps.\\r\\n2 Remove the nuts of the water intake hoses to\\r\\naccess the filters on the water intake valves.\\r\\nClean them with an appropriate brush. If the\\r\\nfilters are too dirty, take them out by means of\\r\\npliers and clean them.\\r\\n3 Take out the filters on the flat ends of the water\\r\\nintake hoses together with the gaskets and\\r\\nclean thoroughly under running water.\\r\\n4 Replace the gaskets and filters carefully in their\\r\\nplaces and tighten the hose nuts by hand.\\r\\n6.5 Draining remaining water\\r\\nand cleaning the pump filter\\r\\nThe filter system in your machine prevents solid\\r\\nitems such as buttons, coins and fabric fibers\\r\\nclogging the pump impeller during discharge of\\r\\nwashing water. Thus, the water will be discharged\\r\\nwithout any problem and the service life of the\\r\\npump will extend.\\r\\nIf the machine fails to drain water, the pump filter\\r\\nis clogged. Filter must be cleaned whenever it\\r\\nis clogged or in every 3 months. Water must be\\r\\ndrained off first to clean the pump filter.\\r\\nIn addition, prior to transporting the machine\\r\\n(e.g., when moving to another house) and in case\\r\\nof freezing of the water, water may have to be\\r\\ndrained completely.\\r\\nA WARNING: Foreign substances left\\r\\nin the pump filter may damage your\\r\\nmachine or may cause noise problem.\\r\\nA WARNING: If the product is not in use,\\r\\nturn the tap off, detach the supply hose\\r\\nand drain the water inside the machine\\r\\nagainst any freezing possibility in the\\r\\nregion of installation.\\r\\nA WARNING: After each use close the\\r\\nsupply hose tap of the product.\\r\\nIn order to clean the dirty filter and discharge\\r\\nthe water:\\r\\n1 Unplug the machine to cut off the supply power.\\r\\nA WARNING: Temperature of the water\\r\\ninside the machine may rise up to 90 \\u00BAC.\\r\\nTo avoid burning risk, clean the filter after\\r\\nthe water in the machine cools down.\\r\\n2 Open the filter cap.\\r\\nWashing Machine \\/User\\u2019s Manual 35 \\/ EN\\r\\nMaintenance and cleaning\\r\\n3 Some of our products have emergency draining\\r\\nhose and some does not have. Follow the steps\\r\\nbelow to discharge the water.\\r\\nDischarging the water when the product has\\r\\nan emergency draining hose:\\r\\na Pull the emergency draining hose out from its\\r\\nseat\\r\\nb Place a large container at the end of the hose.\\r\\nDrain the water into the container by pulling\\r\\nout the plug at the end of the hose. When the\\r\\ncontainer is full, block the inlet of the hose\\r\\nby replacing the plug. After the container is\\r\\nemptied, repeat the above procedure to drain\\r\\nthe water in the machine completely.\\r\\nc When draining of water is finished, close the\\r\\nend by the plug again and fix the hose in its\\r\\nplace.\\r\\nd Turn the pump filter to take it out.\\r\\nDischarging the water when the product\\r\\ndoes not have an emergency draining hose:\\r\\na Place a large container in front of the filter to\\r\\ncatch water from the filter.\\r\\nb Loosen pump filter (anticlockwise) until water\\r\\nstarts to flow. Fill the flowing water into the\\r\\ncontainer you have placed in front of the filter.\\r\\nAlways keep a piece of cloth handy to absorb\\r\\nany spilled water.\\r\\nc When the water inside the machine is finished,\\r\\ntake out the filter completely by turning it.\\r\\n4 Clean any residues inside the filter as well as\\r\\nfibers, if any, around the pump impeller region.\\r\\n5 Install the filter.\\r\\n6 If the filter cap is composed of two pieces, close\\r\\nthe filter cap by pressing on the tab. If it is one\\r\\npiece, seat the tabs in the lower part into their\\r\\nplaces first, and then press the upper part to\\r\\nclose.\\r\\n36 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\n7 Troubleshooting\\r\\nProgramme cannot be started or selected.\\r\\n\\u2022 Washing machine has switched to self protection mode due to a supply problem (line voltage, water pressure,\\r\\netc.). >>> To cancel the programme, turn the Programme Selection knob to select another programme. Previous\\r\\nprogramme will be cancelled. (See \\\"Cancelling the programme\\\")\\r\\nWater in the machine.\\r\\n\\u2022 Some water might have remained in the product due to the quality control processes in the production. >>> This is\\r\\nnot a failure; water is not harmful to the machine.\\r\\nThere is water leaking from the bottom of the machine.\\r\\n\\u2022 Likely problems with hoses or the pump filter. >>> Be sure the seals of the water inlet hoses are securely fitted.\\r\\nAttach the hose to the tap tightly.\\r\\n\\u2022 Pump filter might not be closed fully. >>> Check if the pump filter is completely closed.\\r\\nMachine does not fill with water.\\r\\n\\u2022 Tap is turned off. >>> Open the taps.\\r\\n\\u2022 Water inlet hose is bent. >>> Correct the hose.\\r\\n\\u2022 Water inlet filter is clogged. >>> Clean the filter.\\r\\n\\u2022 The loading door is ajar. >>> Close the loading door.\\r\\nMachine does not drain water.\\r\\n\\u2022 Water drain hose might be clogged or twisted. >>> Clean or flatten the hose.\\r\\n\\u2022 Pump filter is clogged. >>> Clean the pump filter.\\r\\nMachine vibrates or makes noise.\\r\\n\\u2022 Machine might be standing unbalanced. >>> Adjust the feet to level the machine.\\r\\n\\u2022 A hard substance might have entered into the pump filter. >>> Clean the pump filter.\\r\\n\\u2022 Transportation safety bolts are not removed. >>> Remove the transportation safety bolts.\\r\\n\\u2022 Laundry quantity in the machine might be too little. >>> Add more laundry to the machine.\\r\\n\\u2022 Machine might be overloaded with laundry. >>> Take out some of the laundry from the machine or distribute the\\r\\nload by hand to balance it homogenously in the machine.\\r\\n\\u2022 Machine might be leaning on a rigid item. >>> Check if the machine is not leaning on anything.\\r\\nMachine stopped shortly after the programme started.\\r\\n\\u2022 Machine might have stopped temporarily due to low voltage. >>> It will resume running when the voltage restores\\r\\nto the normal level.\\r\\nMachine directly discharges the water it takes in.\\r\\n\\u2022 Draining hose might not be at adequate height. >>> Connect the water draining hose as described in the operation\\r\\nmanual.\\r\\nNo water can be seen in the machine during washing.\\r\\n\\u2022 The water level is not visible from outside of the washing machine. This is not a failure.\\r\\nLoading door cannot be opened.\\r\\n\\u2022 Door lock is activated because of the water level in the machine. >>> Drain the water by running the Pump or Spin\\r\\nprogramme.\\r\\n\\u2022 Machine is heating up the water or it is at the spinning cycle. >>> Wait until the programme completes.\\r\\n\\u2022 Child lock is engaged. Door lock will be deactivated a couple of minutes after the programme has come to an end.\\r\\n>>> Wait for a couple of minutes for deactivation of the door lock.\\r\\nWashing Machine \\/User\\u2019s Manual 37 \\/ EN\\r\\nTroubleshooting\\r\\nWashing takes longer than the specified in the manual.(*)\\r\\n\\u2022 Water pressure is low. >>> Machine waits until taking in adequate amount of water to prevent poor washing\\r\\nquality due to the decreased amount of water. Therefore, the washing time extends.\\r\\n\\u2022 Voltage might be low. >>> Washing time is prolonged to avoid poor washing results when the supply voltage is\\r\\nlow.\\r\\n\\u2022 Input temperature of water might be low. >>> Required time to heat up the water extends in cold seasons. Also,\\r\\nwashing time can be lengthened to avoid poor washing results.\\r\\n\\u2022 Number of rinses and\\/or amount of rinse water might have increased. >>> Machine increases the amount of rinse\\r\\nwater when good rinsing is needed and adds an extra rinsing step if necessary.\\r\\n\\u2022 Excessive foam might have occurred and automatic foam absorption system might have been activated due to too\\r\\nmuch detergent usage. >>> Use recommended amount of detergent.\\r\\nProgramme time does not countdown. (On models with display) (*)\\r\\n\\u2022 Timer may stop during water intake. >>> Timer indicator will not countdown until the machine takes in adequate\\r\\namount of water. The machine will wait until there is sufficient amount of water to avoid poor washing results due to\\r\\nlack of water. Timer indicator will resume countdown after this.\\r\\n\\u2022 Timer may stop during heating step. >>> Timer indicator will not countdown until the machine reaches the\\r\\nselected temperature.\\r\\n\\u2022 Timer may stop during spinning step. >>> Automatic unbalanced load detection system might be activated due to\\r\\nthe unbalanced distribution of the laundry in the drum.\\r\\nProgramme time does not countdown. (*)\\r\\n\\u2022 There might be an imbalance of laundry in the machine. >>> Automatic unbalanced load detection system might\\r\\nbe activated due to the unbalanced distribution of the laundry in the drum.\\r\\nMachine does not switch to spinning step. (*)\\r\\n\\u2022 There might be an imbalance of laundry in the machine. >>> Automatic unbalanced load detection system might\\r\\nbe activated due to the unbalanced distribution of the laundry in the drum.\\r\\n\\u2022 The machine will not spin if water is not drained completely. >>> Check the filter and the draining hose.\\r\\n\\u2022 Excessive foam might have occurred and automatic foam absorption system might have been activated due to too\\r\\nmuch detergent usage. >>> Use recommended amount of detergent.\\r\\nWashing performance is poor: Laundry turns gray. (**)\\r\\n\\u2022 Insufficient amount of detergent was used over a long period of time. >>> Use the recommended amount of\\r\\ndetergent appropriate for water hardness and the laundry.\\r\\n\\u2022 Washing was made at low temperatures for a long time over a long period of time. >>> Select the proper\\r\\ntemperature for the laundry to be washed.\\r\\n\\u2022 Insufficient amount of detergent is used with hard waters. >>> Using insufficient amount of detergent with hard\\r\\nwater causes the soil to stick on the cloth and this turns the cloth into gray in time. It is difficult to eliminate graying\\r\\nonce it happens. Use the recommended amount of detergent appropriate for water hardness and the laundry.\\r\\n\\u2022 Too much detergent is used. >>> Use the recommended amount of detergent appropriate for water hardness and\\r\\nthe laundry.\\r\\nWashing performance is poor: Stains persist or the laundry is not whitened. (**)\\r\\n\\u2022 Insufficient amount of detergent is used. >>> Use recommended amount of detergent appropriate for the laundry.\\r\\n\\u2022 Excessive laundry was loaded in. >>> Do not load the machine in excess. Load with amounts recommended in the\\r\\n\\\"Programme and consumption table\\\".\\r\\n\\u2022 Wrong programme and temperature were selected. >>> Select the proper programme and temperature for the\\r\\nlaundry to be washed.\\r\\n\\u2022 Wrong type of detergent is used. >>> Use original detergent appropriate for the machine.\\r\\n\\u2022 Detergent is put in the wrong compartment. >>> Put the detergent in the correct compartment. Do not mix the\\r\\nbleaching agent and the detergent with each other.\\r\\n38 \\/ EN Washing Machine \\/User\\u2019s Manual\\r\\nTroubleshooting\\r\\nWashing performance is poor: Oily stains appeared on the laundry. (**)\\r\\n\\u2022 Regular drum cleaning is not applied. >>> Clean the drum regularly. For this, please see 6.2.\\r\\nWashing performance is poor: Clothes smell unpleasantly. (**)\\r\\n\\u2022 Odours and bacteria layers are formed on the drum as a result of continuous washing at lower temperatures and\\/or\\r\\nin short programmes. >>> Leave the detergent drawer as well as the loading door of the machine ajar after each\\r\\nwashing. Thus, a humid environment favorable for bacteria cannot occur in the machine.\\r\\nColour of the clothes faded. (**)\\r\\n\\u2022 Excessive laundry was loaded in. >>> Do not load the machine in excess.\\r\\n\\u2022 Detergent in use is damp. >>> Keep detergents closed in an environment free of humidity and do not expose them\\r\\nto excessive temperatures.\\r\\n\\u2022 A higher temperature is selected. >>> Select the proper programme and temperature according to the type and\\r\\nsoiling degree of the laundry.\\r\\nIt does not rinse well.\\r\\n\\u2022 The amount, brand and storage conditions of the detergent used are inappropriate. >>> Use a detergent\\r\\nappropriate for the washing machine and your laundry. Keep detergents closed in an environment free of humidity\\r\\nand do not expose them to excessive temperatures.\\r\\n\\u2022 Detergent is put in the wrong compartment. >>> If detergent is put in the prewash compartment although prewash\\r\\ncycle is not selected, machine can take this detergent during rinsing or softener step. Put the detergent in the\\r\\ncorrect compartment.\\r\\n\\u2022 Pump filter is clogged. >>> Check the filter.\\r\\n\\u2022 Drain hose is folded. >>> Check the drain hose.\\r\\nLaundry became stiff after washing. (**)\\r\\n\\u2022 Insufficient amount of detergent is used. >>> Using insufficient amount of detergent for the water hardness can\\r\\ncause the laundry to become stiff in time. Use appropriate amount of detergent according to the water hardness.\\r\\n\\u2022 Detergent is put in the wrong compartment. >>> If detergent is put in the prewash compartment although prewash\\r\\ncycle is not selected, machine can take this detergent during rinsing or softener step. Put the detergent in the\\r\\ncorrect compartment.\\r\\n\\u2022 Detergent might be mixed with the softener. >>> Do not mix the softener with detergent. Wash and clean the\\r\\ndispenser with hot water.\\r\\nLaundry does not smell like the softener. (**)\\r\\n\\u2022 Detergent is put in the wrong compartment. >>> If detergent is put in the prewash compartment although prewash\\r\\ncycle is not selected, machine can take this detergent during rinsing or softener step. Wash and clean the dispenser\\r\\nwith hot water. Put the detergent in the correct compartment.\\r\\n\\u2022 Detergent might be mixed with the softener. >>> Do not mix the softener with detergent. Wash and clean the\\r\\ndispenser with hot water.\\r\\nDetergent residue in the detergent drawer. (**)\\r\\n\\u2022 Detergent is put in wet drawer. >>> Dry the detergent drawer before putting in detergent.\\r\\n\\u2022 Detergent has gotten damp. >>> Keep detergents closed in an environment free of humidity and do not expose\\r\\nthem to excessive temperatures.\\r\\n\\u2022 Water pressure is low. >>> Check the water pressure.\\r\\n\\u2022 The detergent in the main wash compartment got wet while taking in the prewash water. Holes of the detergent\\r\\ncompartment are blocked. >>> Check the holes and clean if they are clogged.\\r\\n\\u2022 There is a problem with the detergent drawer valves. >>> Call the Authorized Service Agent.\\r\\n\\u2022 Detergent might be mixed with the softener. >>> Do not mix the softener with detergent. Wash and clean the\\r\\ndispenser with hot water.\\r\\n\\u2022 Regular drum cleaning is not applied. >>> Clean the drum regularly. For this, please see 6.2.\\r\\nWashing Machine \\/User\\u2019s Manual 39 \\/ EN\\r\\nTroubleshooting\\r\\nThere is detergent left on the laundry. (**)\\r\\n\\u2022 Excessive laundry was loaded in. >>> Do not load the machine in excess.\\r\\n\\u2022 Wrong programme and temperature were selected. >>> Select the proper programme and temperature for the\\r\\nlaundry to be washed.\\r\\n\\u2022 Wrong detergent was used. >>> Select the proper detergent for the laundry to be washed.\\r\\nToo much foam forms in the machine. (**)\\r\\n\\u2022 Improper detergents for the washing machine are being used. >>> Use detergents appropriate for the washing\\r\\nmachine.\\r\\n\\u2022 Excessive amount of detergent is used. >>> Use only sufficient amount of detergent.\\r\\n\\u2022 Detergent was stored under improper conditions. >>> Store detergent in a closed and dry location. Do not store in\\r\\nexcessively hot places.\\r\\n\\u2022 Some meshed laundry such as tulle may foam too much because of their texture. >>> Use smaller amounts of\\r\\ndetergent for this type of item.\\r\\n\\u2022 Detergent is put in the wrong compartment. >>> Put the detergent in the correct compartment.\\r\\n\\u2022 Softener is being taken early. >>> There may be problem in the valves or in the detergent dispenser. Call the\\r\\nAuthorized Service Agent.\\r\\nFoam is overflowing from the detergent drawer.\\r\\n\\u2022 Too much detergent is used. >>> Mix 1 tablespoonful softener and \\u00BD l water and pour into the main wash\\r\\ncompartment of the detergent drawer.\\r\\n\\u2022 Put detergent into the machine suitable for the programmes and maximum loads indicated in the \\u201CProgramme and\\r\\nconsumption table\\u201D. When you use additional chemicals (stain removers, bleaches and etc), reduce the amount of\\r\\ndetergent.\\r\\nLaundry remains wet at the end of the programme. (*)\\r\\n\\u2022 Excessive foam might have occurred and automatic foam absorption system might have been activated due to too\\r\\nmuch detergent usage. >>> Use recommended amount of detergent.\\r\\n* Machine does not switch to spinning step when the laundry is not evenly distributed in the drum to prevent any\\r\\ndamage to the machine and to its surrounding environment. Laundry should be rearranged and re-spun.\\r\\n** Regular drum cleaning might not be applied.>>> Clean the drum regularly. See, 6.2\\r\\nA WARNING: If you cannot eliminate the problem although you follow the instructions in this section,\\r\\nconsult the dealer or the Authorized Service Agent. Never try to repair a nonfunctional product yourself.\\r\\nwww.beko.com\",\r\n    \"dishes\": [\r\n        {\r\n            \"dishIdentifier\": \"5f80cb3310115a2c8058a1d9\",\r\n            \"quantity\": 1\r\n        },\r\n        {\r\n            \"dishIdentifier\": \"5f80c7de5508d7198e6e4821\",\r\n            \"quantity\": 2,\r\n            \"extras\": [ \"5f80cbf010115a2c8058a1e4\", \"5f80cbf010115a2c8058a1e3\"]\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/orders/PlaceOrder",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"PlaceOrder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PlaceOrder with random incorrect data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5bf28bf0-d353-4a46-b6df-6458400783cd",
+								"exec": [
+									"pm.test(\"Status code is 400\", () => {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is present\", () => {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response must have a body\", () => {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message contains details about incorrect dish identifier\", () => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.expect(responseBody.message).to.contain(\"Dish with identifier\");\r",
+									"    pm.expect(responseBody.message).to.contain(\"does not exists!\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"foo@bar.com\",\r\n    \"dishes\": [\r\n        {\r\n            \"dishIdentifier\": \"fsaqdfasdfg\",\r\n            \"quantity\": 1\r\n        },\r\n        {\r\n            \"dishIdentifier\": \"asdasdasfsadf\",\r\n            \"quantity\": 2,\r\n            \"extras\": [ \"dfasda\", \"dadsdasd\"]\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/orders/PlaceOrder",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"PlaceOrder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PlaceOrder with empty dishes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3b4d7142-d2d5-43a8-b033-5f1da14b7b55",
+								"exec": [
+									"pm.test(\"Status code is 400\", () => {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body includes error message\", () => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.expect(responseBody).to.have.property(\"message\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message contains details about missing property\", () => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.expect(responseBody.message).to.contain(\"'Dishes' must not be empty.\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"foo@bar.com\",\r\n    \"dishes\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/orders/PlaceOrder",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"PlaceOrder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PlaceOrder with dishes set to null",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6c32fda9-d511-42df-b7d8-a7ffd4aec7cc",
+								"exec": [
+									"pm.test(\"Status code is 400\", () => {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body includes error message\", () => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.expect(responseBody).to.have.property(\"message\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message contains details about missing property\", () => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.expect(responseBody.message).to.contain(\"'Dishes' must not be empty.\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"foo@bar.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/orders/PlaceOrder",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"PlaceOrder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PlaceOrder without email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c28b9864-6e40-451a-a633-8b2f86776c90",
+								"exec": [
+									"pm.test(\"Status code is 400\", () => {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is present\", () => {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response must have a body\", () => {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body includes error message\", () => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.expect(responseBody).to.have.property(\"message\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message contains details about missing property\", () => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.expect(responseBody.message).to.contain(\"'Email' must not be empty.\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"dishes\": [\r\n        {\r\n            \"dishIdentifier\": \"5f80cb3310115a2c8058a1d9\",\r\n            \"quantity\": 1\r\n        },\r\n        {\r\n            \"dishIdentifier\": \"5f80c7de5508d7198e6e4821\",\r\n            \"quantity\": 2,\r\n            \"extras\": [ \"5f80cbf010115a2c8058a1e4\", \"5f80cbf010115a2c8058a1e3\"]\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/orders/PlaceOrder",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"PlaceOrder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PlaceOrder without body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6024d388-92bf-4de2-9c95-d30b11724038",
+								"exec": [
+									"pm.test(\"Status code is 415\", () => {\r",
+									"    pm.response.to.have.status(415);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/orders/PlaceOrder",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"PlaceOrder"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"variable": [
+		{
+			"id": "4e050d1a-b078-4d91-b0f5-a02db4da93aa",
+			"key": "baseUrl",
+			"value": " http://localhost:5000"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
