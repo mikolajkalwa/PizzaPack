@@ -41,7 +41,7 @@ namespace gui
                     {
                         var extras = _orderHelpers.GetExtrasById(dishOrderExtra);
                         extrasPrice += extras.ExtrasPrice;
-                        orderedExtras.AppendLine($"{extras.ExtrasName}");
+                        orderedExtras.AppendLine(extras.ExtrasName);
                     }
                 }
 
