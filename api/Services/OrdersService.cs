@@ -31,10 +31,11 @@ namespace api.Services
             return (await _database.Orders.FindAsync(_ => true)).ToEnumerable().Reverse();
         }
 
-        public async Task<Order> CreateOrder(PlaceOrder order)
+
+        private async Task ValidateOrder(PlaceOrder order)
         {
             var validator = new PlaceOrderValidator();
-            var results = validator.Validate(order);
+            var results = await validator.ValidateAsync(order);
 
             if (!results.IsValid)
             {
@@ -46,16 +47,12 @@ namespace api.Services
                 throw new ArgumentException(message.ToString());
             }
 
-            var placedOrder = new Order { Dishes = new List<OrderedDish>() };
-
             foreach (var orderedDish in order.Dishes)
             {
                 var menuEntryForOrderedDish = await _ordersServiceHelpers.GetDishById(orderedDish.DishIdentifier);
-                List<OrderedExtras> orderedExtrasForDish = null;
 
                 if (orderedDish.Extras != null)
                 {
-                    orderedExtrasForDish = new List<OrderedExtras>();
 
                     if (orderedDish.Extras.Count != orderedDish.Extras.Distinct().Count())
                     {
@@ -71,7 +68,31 @@ namespace api.Services
                         {
                             throw new ArgumentException($"Cannot order extras from category {menuEntryForOrderedExtras.DishCategory} for dish from category {menuEntryForOrderedDish.DishCategory}");
                         }
+                    }
+                }
 
+            }
+        }
+
+        public async Task<Order> CreateOrder(PlaceOrder order)
+        {
+            await ValidateOrder(order);
+
+            var placedOrder = new Order { Dishes = new List<OrderedDish>() };
+
+            foreach (var orderedDish in order.Dishes)
+            {
+                var menuEntryForOrderedDish = await _ordersServiceHelpers.GetDishById(orderedDish.DishIdentifier);
+                List<OrderedExtras> orderedExtrasForDish = null;
+
+                if (orderedDish.Extras != null)
+                {
+                    orderedExtrasForDish = new List<OrderedExtras>();
+
+                    foreach (var orderedExtras in orderedDish.Extras)
+                    {
+
+                        var menuEntryForOrderedExtras = await _ordersServiceHelpers.GetExtrasById(orderedExtras);
 
                         orderedExtrasForDish.Add(new OrderedExtras
                         {
